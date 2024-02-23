@@ -13,3 +13,9 @@ python backend/init_db.py
 ```
 python -m uvicorn backend.main:app
 ```
+
+## Run FrontEnd
+```
+ $ cd frontend
+ $ npm run serve
+```
