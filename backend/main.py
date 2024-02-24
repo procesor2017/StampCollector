@@ -5,8 +5,23 @@ from backend.database import SessionLocal, engine
 from typing import List
 from backend.schemas import EmissionBase, EmissionCreate, EmissionResponse, StampBase, StampCreate, StampResponse, StampSealBase, StampSealCreate, StampSealResponse, SaleBase, SaleCreate, SaleResponse
 from fastapi.openapi.utils import get_openapi
+from uvicorn import run
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+# ============================
+# Middleware for connecting from web
+# ============================
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Dependency to get the database session
 def get_db():
@@ -16,25 +31,25 @@ def get_db():
     finally:
         db.close()
 
+
 # ============================
 # CRUD operations for Emission
 # ============================
 @app.post("/emissions/", response_model=EmissionResponse)
-def create_emission(emission_create: EmissionCreate, db: Session = Depends(get_db)):
+async def create_emission(emission_create: EmissionCreate, db: Session = Depends(get_db)):
     db_emission = Emission(**emission_create.model_dump())
     db.add(db_emission)
     db.commit()
     db.refresh(db_emission)
     return db_emission
 
-
 @app.get("/emissions/", response_model=List[EmissionResponse])
-def read_emissions(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+async def read_emissions(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     emissions = db.query(Emission).offset(skip).limit(limit).all()
     return emissions
 
 @app.get("/emissions/{emission_id}", response_model=EmissionResponse)
-def read_emission(emission_id: int, db: Session = Depends(get_db)):
+async def read_emission(emission_id: int, db: Session = Depends(get_db)):
     emission = db.query(Emission).filter(Emission.id == emission_id).first()
     if emission is None:
         raise HTTPException(status_code=404, detail="Emission not found")
@@ -63,12 +78,25 @@ def delete_emission(emission_id: int, db: Session = Depends(get_db)):
     db.commit()
     return emission
 
+# Endpoint pro získání emisí a příslušných známek
+@app.get("/emissions-with-stamps/", response_model=list[EmissionResponse])
+def get_emissions_with_stamps(db: Session = Depends(get_db)):
+    emissions = db.query(Emission).all()
+    emissions_with_stamps = []
+
+    for emission in emissions:
+        stamps = db.query(Stamp).filter(Stamp.emission_id == emission.id).all()
+        emission_data = EmissionResponse(id=emission.id, name=emission.name, stamps=[StampResponse(id=stamp.id, catalog_number=stamp.catalog_number, name=stamp.name, emission_id=stamp.emission_id) for stamp in stamps])
+        emissions_with_stamps.append(emission_data)
+
+    return emissions_with_stamps
+
 # ============================
 # CRUD operations for Stamp
 # ============================
 @app.post("/stamps/", response_model=StampResponse)
 def create_stamp(stamp_create: StampCreate, db: Session = Depends(get_db)):
-    db_stamp = Stamp(**stamp_create.dict())
+    db_stamp = Stamp(**stamp_create.model_dump())
     db.add(db_stamp)
     db.commit()
     db.refresh(db_stamp)

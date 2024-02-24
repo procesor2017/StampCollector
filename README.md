@@ -11,7 +11,7 @@ python backend/init_db.py
 
 ## Run BackEnd
 ```
-python -m uvicorn backend.main:app
+python -m uvicorn backend.main:app --port 8080 --reload
 ```
 
 ## Run FrontEnd
@@ -19,3 +19,8 @@ python -m uvicorn backend.main:app
  $ cd frontend
  $ npm run serve
 ```
+
+## What we need to add
+- Post Cover
+- auction house 
+- Country of emission and stamps

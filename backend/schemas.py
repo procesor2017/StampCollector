@@ -1,15 +1,7 @@
 from pydantic import BaseModel
 from typing import List
 
-# Schémata pro Emission
-class EmissionBase(BaseModel):
-    name: str
 
-class EmissionCreate(EmissionBase):
-    pass
-
-class EmissionResponse(EmissionBase):
-    id: int
 
 # Schémata pro Stamp
 class StampBase(BaseModel):
@@ -22,6 +14,17 @@ class StampCreate(StampBase):
 
 class StampResponse(StampBase):
     id: int
+
+# Schémata pro Emission
+class EmissionBase(BaseModel):
+    name: str
+
+class EmissionCreate(EmissionBase):
+    pass
+
+class EmissionResponse(EmissionBase):
+    id: int
+    stamps: List[StampResponse]
 
 # Schémata pro StampType
 class StampTypeBase(BaseModel):

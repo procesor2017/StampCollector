@@ -1,38 +1,44 @@
 <template>
   <div>
-    <h1>Emission Page</h1>
-    <ul>
-      <li v-for="emission in emissions" :key="emission.id">{{ emission.name }}</li>
-    </ul>
+    <h1>Emissions with Stamps</h1>
+    <a-collapse accordion>
+      <a-collapse-panel
+        v-for="emission in emissions"
+        :key="emission.id"
+        :header="emission.name"
+      >
+        <a-card v-for="stamp in emission.stamps" :key="stamp.id">
+          <p>{{ stamp.name }}</p>
+          <p>{{ stamp.catalog_number }}</p>
+        </a-card>
+      </a-collapse-panel>
+    </a-collapse>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import { EmissionResponse } from '../..//types/types';
+<script>
 import axios from 'axios';
 
-export default defineComponent({
-  name: 'EmissionPage',
+export default {
   data() {
     return {
-      emissions: [] as EmissionResponse[],
+      emissions: [],
     };
   },
   mounted() {
-    this.fetchEmissions();
+    this.fetchEmissionsWithStamps();
   },
   methods: {
-    async fetchEmissions() {
+    async fetchEmissionsWithStamps() {
       try {
-        const response = await axios.get('/emissions');
+        const response = await axios.get('/emissions-with-stamps/');
         this.emissions = response.data;
       } catch (error) {
-        console.error('Error fetching emissions:', error);
+        console.error('Error fetching emissions with stamps:', error);
       }
     },
   },
-});
+};
 </script>
 
 <style scoped>
