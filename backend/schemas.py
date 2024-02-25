@@ -7,6 +7,7 @@ class StampBase(BaseModel):
     emission_id: int
     name: str
     country: str
+    photo_path_basic: str
 
 class StampCreate(StampBase):
     pass

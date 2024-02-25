@@ -14,12 +14,14 @@
             v-for="stamp in emission.stamps"
             :key="stamp.id"
           >
+          <img :src=image>
             <router-link :to="{ name: 'Stamp', params: { stamp_id: stamp.id } }">
               <div v-if="!stamp.photo_path_basic">
                 <a-empty />
               </div>
               <div v-else>
-                <CustomImage :src="stamp.photo_path_basic" />
+                {{ stamp.photo_path_basic }}
+                <img :src="stamp.photo_path_basic" />
               </div>
               <p>{{ stamp.name }}</p>
               <p>{{ stamp.catalog_number }}</p>
@@ -38,6 +40,7 @@ export default {
   data() {
     return {
       emissions: [],
+      image: require('@/assets/images/austria/1850-1918/1Kr1850.png')
     };
   },
   mounted() {
@@ -51,6 +54,9 @@ export default {
       } catch (error) {
         console.error('Error fetching emissions with stamps:', error);
       }
+    },
+    getAbsolutePath(relativePath) {
+      return require('@/assets' + relativePath);
     },
   },
 };
