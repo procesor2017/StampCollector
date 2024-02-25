@@ -1,4 +1,3 @@
-<!-- Emission.vue -->
 <template>
   <div>
     <h1>Emissions with Stamps</h1>
@@ -7,23 +6,26 @@
         v-for="emission in emissions"
         :key="emission.id"
         :header="emission.name"
+        class="custom-collapse-panel"
       >
-        <a-card
-          class="custom-card"
-          v-for="stamp in emission.stamps"
-          :key="stamp.id"
-        >
-          <router-link :to="{ name: 'Stamp', params: { stamp_id: stamp.id } }">
-            <div v-if="!stamp.photo_path_basic">
-              <a-empty />
-            </div>
-            <div v-else>
-              <CustomImage :src="stamp.photo_path_basic" />
-            </div>
-            <p>{{ stamp.name }}</p>
-            <p>{{ stamp.catalog_number }}</p>
-          </router-link>
-        </a-card>
+        <div class="custom-card-container">
+          <a-card
+            class="custom-card"
+            v-for="stamp in emission.stamps"
+            :key="stamp.id"
+          >
+            <router-link :to="{ name: 'Stamp', params: { stamp_id: stamp.id } }">
+              <div v-if="!stamp.photo_path_basic">
+                <a-empty />
+              </div>
+              <div v-else>
+                <CustomImage :src="stamp.photo_path_basic" />
+              </div>
+              <p>{{ stamp.name }}</p>
+              <p>{{ stamp.catalog_number }}</p>
+            </router-link>
+          </a-card>
+        </div>
       </a-collapse-panel>
     </a-collapse>
   </div>
@@ -59,8 +61,21 @@ export default {
   color: red;
 }
 
+.custom-collapse-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.custom-card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
 .custom-card {
   width: 300px;
   height: 400px;
+  margin: 0 16px 16px 0; /* Okraj mezi kartami, můžete upravit podle potřeby */
 }
 </style>
