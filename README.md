@@ -8,6 +8,10 @@ Homemade project for creating web app for collecting data about stamps
 ```
 python backend/init_db.py
 ```
+## Add data to DB
+```
+python backend/mock_data.py
+```
 
 ## Run BackEnd
 ```
