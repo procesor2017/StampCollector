@@ -86,7 +86,7 @@ def get_emissions_with_stamps(db: Session = Depends(get_db)):
 
     for emission in emissions:
         stamps = db.query(Stamp).filter(Stamp.emission_id == emission.id).all()
-        emission_data = EmissionResponse(id=emission.id, name=emission.name, country=emission.country, stamps=[StampResponse(id=stamp.id, catalog_number=stamp.catalog_number, name=stamp.name, emission_id=stamp.emission_id, country=stamp.country) for stamp in stamps])
+        emission_data = EmissionResponse(id=emission.id, name=emission.name, country=emission.country, description=emission.description, stamps=[StampResponse(id=stamp.id, catalog_number=stamp.catalog_number, name=stamp.name, emission_id=stamp.emission_id, country=stamp.country) for stamp in stamps])
         emissions_with_stamps.append(emission_data)
 
     return emissions_with_stamps

@@ -18,6 +18,7 @@ class StampResponse(StampBase):
 class EmissionBase(BaseModel):
     name: str
     country: str
+    description: str
 
 class EmissionCreate(EmissionBase):
     pass
