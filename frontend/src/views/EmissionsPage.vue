@@ -1,3 +1,4 @@
+<!-- Emission.vue -->
 <template>
   <div>
     <h1>Emissions with Stamps</h1>
@@ -7,15 +8,21 @@
         :key="emission.id"
         :header="emission.name"
       >
-        <a-card class="custom-card" v-for="stamp in emission.stamps" :key="stamp.id">
-          <div v-if="!stamp.photo_path_basic">
-            <a-empty />
-          </div>
-          <div v-else>
-            <CustomImage :src="stamp.photo_path_basic" />
-          </div>
-          <p>{{ stamp.name }}</p>
-          <p>{{ stamp.catalog_number }}</p>
+        <a-card
+          class="custom-card"
+          v-for="stamp in emission.stamps"
+          :key="stamp.id"
+        >
+          <router-link :to="{ name: 'Stamp', params: { stamp_id: stamp.id } }">
+            <div v-if="!stamp.photo_path_basic">
+              <a-empty />
+            </div>
+            <div v-else>
+              <CustomImage :src="stamp.photo_path_basic" />
+            </div>
+            <p>{{ stamp.name }}</p>
+            <p>{{ stamp.catalog_number }}</p>
+          </router-link>
         </a-card>
       </a-collapse-panel>
     </a-collapse>
@@ -53,8 +60,7 @@ export default {
 }
 
 .custom-card {
-  width: 300px; 
-  height: 400px; 
+  width: 300px;
+  height: 400px;
 }
-
 </style>

@@ -50,6 +50,6 @@ class Sale(Base):
     __tablename__ = 'sale'
 
     id = Column(Integer, primary_key=True)
-    stamp_id = Column(Integer, ForeignKey('stamp.id'), nullable=False)
+    stamp_type_id = Column(Integer, ForeignKey('stamp_type.id'), nullable=False)
     price = Column(Float, nullable=False)
     sale_date = Column(String, nullable=False)

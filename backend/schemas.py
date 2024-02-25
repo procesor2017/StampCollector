@@ -59,7 +59,7 @@ class StampSealResponse(StampSealBase):
 
 # Schémata pro Sale
 class SaleBase(BaseModel):
-    stamp_id: int
+    stamp_type_id: int
     price: float
     sale_date: str
 
