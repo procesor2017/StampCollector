@@ -10,6 +10,7 @@ class Emission(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(255), nullable=False)
+    country = Column(String(50), nullable=False)
 
 class Stamp(Base):
     __tablename__ = 'stamp'
@@ -18,13 +19,16 @@ class Stamp(Base):
     catalog_number = Column(Integer, unique=True, nullable=False)
     emission_id = Column(Integer, ForeignKey('emission.id'), nullable=False)
     name = Column(String(255), nullable=False)
+    country = Column(String(50), nullable=False)
+    photo_path_basic = Column(String(255), nullable=True)
+
 
 class StampType(Base):
     __tablename__ = 'stamp_type'
 
     id = Column(Integer, primary_key=True)
     stamp_id = Column(Integer, ForeignKey('stamp.id'), nullable=False)
-    photo = Column(String(255), nullable=True)
+    photo_path_type = Column(String(255), nullable=True)
     description = Column(String, nullable=True)
     type = Column(String(50), nullable=False)
     color = Column(String(50), nullable=True)

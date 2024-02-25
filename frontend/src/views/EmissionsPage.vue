@@ -7,7 +7,13 @@
         :key="emission.id"
         :header="emission.name"
       >
-        <a-card v-for="stamp in emission.stamps" :key="stamp.id">
+        <a-card class="custom-card" v-for="stamp in emission.stamps" :key="stamp.id">
+          <div v-if="!stamp.photo_path_basic">
+            <a-empty />
+          </div>
+          <div v-else>
+            <CustomImage :src="stamp.photo_path_basic" />
+          </div>
           <p>{{ stamp.name }}</p>
           <p>{{ stamp.catalog_number }}</p>
         </a-card>
@@ -42,5 +48,13 @@ export default {
 </script>
 
 <style scoped>
-/* Styly pro EmissionPage zde */
+.default-image-warning {
+  color: red;
+}
+
+.custom-card {
+  width: 300px; 
+  height: 400px; 
+}
+
 </style>

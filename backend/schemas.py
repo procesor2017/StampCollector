@@ -8,6 +8,7 @@ class StampBase(BaseModel):
     catalog_number: int
     emission_id: int
     name: str
+    country: str
 
 class StampCreate(StampBase):
     pass
@@ -18,13 +19,14 @@ class StampResponse(StampBase):
 # Schémata pro Emission
 class EmissionBase(BaseModel):
     name: str
+    country: str
 
 class EmissionCreate(EmissionBase):
     pass
 
 class EmissionResponse(EmissionBase):
     id: int
-    stamps: List[StampResponse]
+    stamps: List[StampResponse]  = [] # Nepoviný arg
 
 # Schémata pro StampType
 class StampTypeBase(BaseModel):

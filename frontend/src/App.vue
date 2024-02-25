@@ -1,31 +1,35 @@
 <template>
   <div id="app">
     <left-menu />
-    <div class="content">
-      <router-view />
-    </div>
+    <a-layout class="content">
+      <a-layout-content style="padding: 20px; box-sizing: border-box;">
+        <router-view />
+      </a-layout-content>
+    </a-layout>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import LeftMenu from '@/components/LeftMenu.vue'; // Zkontrolujte cestu k vašemu LeftMenu komponentu
+import LeftMenu from '@/components/LeftMenu.vue';
+import { Layout } from 'ant-design-vue';
 
 export default defineComponent({
   name: 'App',
   components: {
     LeftMenu,
+    'a-layout': Layout,
+    'a-layout-content': Layout.Content,
   },
 });
 </script>
 
-<style>
+<style scoped>
 #app {
   display: flex;
 }
 
 .content {
   flex-grow: 1;
-  padding: 20px;
 }
 </style>
