@@ -1,12 +1,12 @@
 from fastapi import FastAPI, HTTPException, Depends
 from sqlalchemy.orm import Session
-from backend.models import Emission, Stamp, StampSeal, Sale
-from backend.database import SessionLocal, engine
+from backend.models import Emission, Stamp, StampSeal, Sale, StampType
+from backend.database import SessionLocal
 from typing import List
-from backend.schemas import EmissionBase, EmissionCreate, EmissionResponse, StampBase, StampCreate, StampResponse, StampSealBase, StampSealCreate, StampSealResponse, SaleBase, SaleCreate, SaleResponse
+from backend.schemas import EmissionCreate, EmissionResponse, StampCreate, StampResponse, StampSealBase, StampSealCreate, StampSealResponse, SaleCreate, SaleResponse, StampTypeCreate, StampTypeResponse
 from fastapi.openapi.utils import get_openapi
-from uvicorn import run
 from fastapi.middleware.cors import CORSMiddleware
+from backend import database_operations
 
 app = FastAPI()
 
@@ -136,6 +136,56 @@ def delete_stamp(stamp_id: int, db: Session = Depends(get_db)):
     db.delete(stamp)
     db.commit()
     return stamp
+
+# ============================
+# CRUD operations for Stamp + StampType
+# ============================
+
+@app.get("/stamp/{stamp_id}/types/")
+def get_stamp_types(stamp_id: int, db: Session = Depends(get_db)):
+    return database_operations.get_stamp_types(db, stamp_id)
+
+# ============================
+# CRUD operations for StampType
+# ============================
+@app.post("/stamp-types/", response_model=StampTypeResponse)
+def create_stamp_type(stamp_type_create: StampTypeCreate, db: Session = Depends(get_db)):
+    db_stamp_type = StampType(**stamp_type_create.dict())
+    db.add(db_stamp_type)
+    db.commit()
+    db.refresh(db_stamp_type)
+    return db_stamp_type
+
+@app.get("/stamp-types/{stamp_type_id}/", response_model=StampTypeResponse)
+def get_stamp_type(stamp_type_id: int, db: Session = Depends(get_db)):
+    db_stamp_type = db.query(StampType).filter(StampType.id == stamp_type_id).first()
+    if db_stamp_type is None:
+        raise HTTPException(status_code=404, detail="Stamp Type not found")
+    return db_stamp_type
+
+@app.put("/stamp-types/{stamp_type_id}/", response_model=StampTypeResponse)
+def update_stamp_type(stamp_type_id: int, stamp_type_update: StampTypeCreate, db: Session = Depends(get_db)):
+    db_stamp_type = db.query(StampType).filter(StampType.id == stamp_type_id).first()
+    if db_stamp_type is None:
+        raise HTTPException(status_code=404, detail="Stamp Type not found")
+    
+    for key, value in stamp_type_update.model_dump().items():
+        setattr(db_stamp_type, key, value)
+
+    db.commit()
+    db.refresh(db_stamp_type)
+    return db_stamp_type
+
+@app.delete("/stamp-types/{stamp_type_id}/", response_model=StampTypeResponse)
+def delete_stamp_type(stamp_type_id: int, db: Session = Depends(get_db)):
+    db_stamp_type = db.query(StampType).filter(StampType.id == stamp_type_id).first()
+    if db_stamp_type is None:
+        raise HTTPException(status_code=404, detail="Stamp Type not found")
+
+    db.delete(db_stamp_type)
+    db.commit()
+
+    return db_stamp_type
 
 # ============================
 # CRUD operations for StampSeal

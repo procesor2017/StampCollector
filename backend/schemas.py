@@ -1,8 +1,6 @@
 from pydantic import BaseModel
 from typing import List
 
-
-
 # Schémata pro Stamp
 class StampBase(BaseModel):
     catalog_number: int
@@ -31,7 +29,7 @@ class EmissionResponse(EmissionBase):
 # Schémata pro StampType
 class StampTypeBase(BaseModel):
     stamp_id: int
-    photo: str
+    photo_path_type: str
     description: str
     type: str
     color: str
@@ -44,7 +42,7 @@ class StampTypeCreate(StampTypeBase):
     pass
 
 class StampTypeResponse(StampTypeBase):
-    id: int
+    stamp_type_id: int
 
 # Schémata pro StampSeal
 class StampSealBase(BaseModel):
