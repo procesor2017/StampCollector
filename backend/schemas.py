@@ -62,6 +62,8 @@ class SaleBase(BaseModel):
     stamp_type_id: int
     price: float
     sale_date: str
+    name_of_auction: str
+    url_on_auction: str
 
 class SaleCreate(SaleBase):
     pass

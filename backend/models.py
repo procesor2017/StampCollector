@@ -53,3 +53,5 @@ class Sale(Base):
     stamp_type_id = Column(Integer, ForeignKey('stamp_type.id'), nullable=False)
     price = Column(Float, nullable=False)
     sale_date = Column(String, nullable=False)
+    name_of_auction =  Column(String(100), nullable=True)
+    url_on_auction = Column(String(255), nullable=True)
