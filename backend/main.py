@@ -145,6 +145,11 @@ def delete_stamp(stamp_id: int, db: Session = Depends(get_db)):
 def get_stamp_types(stamp_id: int, db: Session = Depends(get_db)):
     return database_operations.get_stamp_types(db, stamp_id)
 
+# Stamp + StampType + Sale
+@app.get("/stamp/{stamp_id}/types/sale")
+def get_stamp_types(stamp_id: int, db: Session = Depends(get_db)):
+    return database_operations.get_stamp_type_and_price(db, stamp_id)
+
 # ============================
 # CRUD operations for StampType
 # ============================
