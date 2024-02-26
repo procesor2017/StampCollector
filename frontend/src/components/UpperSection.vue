@@ -4,7 +4,9 @@
         <div class="div-container-stamp-types-info">
             <div class="div-photo-container">
                 <div v-if="stampData.photo_path_basic && stampData.photo_path_basic !== 'None'">
-                    <CustomImage :src="stampData.photo_path_basic" />
+                  <div class="custom-image-container">
+                    <img :src="getAbsolutePath(stampData.photo_path_basic)" alt="Stamp Image" />
+                  </div>
                 </div>
                 <div v-else>
                     <a-empty />
@@ -43,6 +45,11 @@
         };
       },
     },
+    methods: {
+      getAbsolutePath(relativePath) {
+        return require('@/assets/' + relativePath);
+      },
+    }
   };
   </script>
   
@@ -75,4 +82,16 @@
     background-color: #ccc; /* Barva oddělovače */
     margin: 10px 0; /* Můžete přizpůsobit mezery okolo oddělovače */
     }
+
+  .custom-image-container {
+    width: 164px;
+    height: 196px;
+    overflow: hidden;
+  }
+
+  .custom-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
   </style>

@@ -30,8 +30,8 @@ export default {
   methods: {
     async fetchStampData(stampId) {
       try {
-        const response = await axios.get(`/stamp/${stampId}/types/`);
-        this.stampData = response.data[0];
+        const response = await axios.get(`/stamps/${stampId}`);
+        this.stampData = response.data;
       } catch (error) {
         console.error('Error fetching stamp data:', error);
       }
