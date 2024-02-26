@@ -9,22 +9,21 @@
         class="custom-collapse-panel"
       >
         <div class="custom-card-container">
-          <a-card
-            class="custom-card"
+          <router-link
             v-for="stamp in emission.stamps"
             :key="stamp.id"
+            :to="{ name: 'Stamp', params: { stamp_id: stamp.id } }"
           >
-            <router-link :to="{ name: 'Stamp', params: { stamp_id: stamp.id } }">
-              <div v-if="!stamp.photo_path_basic">
-                <a-empty />
+            <a-card class="custom-card">
+              <div class="custom-image-container">
+                <img :src="getAbsolutePath(stamp.photo_path_basic)" alt="Stamp Image" />
               </div>
-              <div v-else>
-                <img :src=getAbsolutePath(stamp.photo_path_basic) />
+              <div class="custom-card-info">
+                <p class="stamp-name">{{ stamp.name }}</p>
+                <p class="stamp-catalog-number">Cat. Number: {{ stamp.catalog_number }}</p>
               </div>
-              <p>{{ stamp.name }}</p>
-              <p>{{ stamp.catalog_number }}</p>
-            </router-link>
-          </a-card>
+            </a-card>
+          </router-link>
         </div>
       </a-collapse-panel>
     </a-collapse>
@@ -38,7 +37,6 @@ export default {
   data() {
     return {
       emissions: [],
-      image: require('@/assets/images/austria/1850-1918/1Kr1850.png')
     };
   },
   mounted() {
@@ -54,17 +52,13 @@ export default {
       }
     },
     getAbsolutePath(relativePath) {
-      return require(`../assets/${relativePath}`)
+      return require('@/assets/' + relativePath);
     },
   },
 };
 </script>
 
 <style scoped>
-.default-image-warning {
-  color: red;
-}
-
 .custom-collapse-panel {
   display: flex;
   flex-direction: column;
@@ -78,8 +72,41 @@ export default {
 }
 
 .custom-card {
-  width: 300px;
-  height: 400px;
-  margin: 0 16px 16px 0; /* Okraj mezi kartami, můžete upravit podle potřeby */
+  width: 200px;
+  margin: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #333; /* Barva textu */
+}
+
+.custom-card:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Efekt stínu při najetí myší */
+}
+
+.custom-image-container {
+  width: 164px;
+  height: 196px;
+  overflow: hidden;
+}
+
+.custom-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.custom-card-info {
+  text-align: center;
+}
+
+.stamp-name {
+  font-weight: bold;
+  margin: 8px 0;
+}
+
+.stamp-catalog-number {
+  margin: 4px 0;
 }
 </style>
