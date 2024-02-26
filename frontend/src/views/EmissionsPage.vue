@@ -14,14 +14,12 @@
             v-for="stamp in emission.stamps"
             :key="stamp.id"
           >
-          <img :src=image>
             <router-link :to="{ name: 'Stamp', params: { stamp_id: stamp.id } }">
               <div v-if="!stamp.photo_path_basic">
                 <a-empty />
               </div>
               <div v-else>
-                {{ stamp.photo_path_basic }}
-                <img :src="stamp.photo_path_basic" />
+                <img :src=getAbsolutePath(stamp.photo_path_basic) />
               </div>
               <p>{{ stamp.name }}</p>
               <p>{{ stamp.catalog_number }}</p>
@@ -56,7 +54,7 @@ export default {
       }
     },
     getAbsolutePath(relativePath) {
-      return require('@/assets' + relativePath);
+      return require(`../assets/${relativePath}`)
     },
   },
 };
