@@ -66,6 +66,9 @@ class SaleBase(BaseModel):
     sale_date: str
     name_of_auction: str
     url_on_auction: str
+    description: str
+    strip: bool
+    convolut: bool
 
 class SaleCreate(SaleBase):
     pass

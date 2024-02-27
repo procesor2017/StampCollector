@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from pydantic import BaseModel
@@ -52,6 +52,9 @@ class Sale(Base):
 
     id = Column(Integer, primary_key=True)
     stamp_type_id = Column(Integer, ForeignKey('stamp_type.id'), nullable=False)
+    description = Column(String, nullable=True)
+    strip = Column(Boolean, nullable=False)  # Změna na Boolean sloupec
+    convolut = Column(Boolean, nullable=False)
     price = Column(Float, nullable=False)
     sale_date = Column(String, nullable=False)
     name_of_auction =  Column(String(100), nullable=True)
