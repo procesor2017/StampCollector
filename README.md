@@ -1,4 +1,6 @@
 # This project doesnt work We are in progress
+I am creating my own catalogue of stamps which will be able to show approximate prices from various auctions.
+It's not a business project or a plan I'm just combining two hobbies together.
 
 # Basic
 Homemade project for creating web app for collecting data about stamps
