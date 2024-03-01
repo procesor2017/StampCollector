@@ -29,3 +29,5 @@ python -m uvicorn backend.main:app --host 0.0.0.0 --port 8000
 
 ## What we need to add
 - Post Cover
+- add additional information for emmision (different paper etc. 1890 emission etc.)
+- for stamps
