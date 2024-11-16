@@ -14,7 +14,7 @@ Run uvicorn for creating db:
 
 Run this script for powershell windows:
 '''
-$env:PYTHONPATH="C:\Users\jfort\Documents\stampcollectorVer2"
+$env:PYTHONPATH="<path to your folder>\stampcollector"
 python shared/utils/mock_database/mock_database.py
 '''
 
