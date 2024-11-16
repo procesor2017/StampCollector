@@ -19,3 +19,6 @@ python shared/utils/mock_database/mock_database.py
 '''
 
 Now u have data in database!
+
+## Swagger
+http://127.0.0.1:8000/docs
