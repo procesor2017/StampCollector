@@ -5,29 +5,17 @@ It's not a business project or a plan I'm just combining two hobbies together.
 # Basic
 Homemade project for creating web app for collecting data about stamps
 
-# Installation
-## Init DB
-```
-python backend/init_db.py
-```
-## Add data to DB
-```
-python backend/mock_data.py
-```
+## How to run
+''' python -m uvicorn backend.app.main:app --reload '''
 
-## Run BackEnd
-```
-python -m uvicorn backend.main:app --port 8080 --reload
-python -m uvicorn backend.main:app --host 0.0.0.0 --port 8000
-```
+## How to mock database:
+Run uvicorn for creating db:
+''' python -m uvicorn backend.app.main:app --reload '''
 
-## Run FrontEnd
-```
- $ cd frontend
- $ npm run serve
-```
+Run this script for powershell windows:
+'''
+$env:PYTHONPATH="C:\Users\jfort\Documents\stampcollectorVer2"
+python shared/utils/mock_database/mock_database.py
+'''
 
-## What we need to add
-- Post Cover
-- add additional information for emmision (different paper etc. 1890 emission etc.)
-- for stamps
+Now u have data in database!
