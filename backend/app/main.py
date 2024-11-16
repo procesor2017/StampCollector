@@ -1,4 +1,3 @@
-# app/main.py
 from fastapi import FastAPI
 from shared.db.crud import insert_emission, insert_stamp
 from shared.db import database

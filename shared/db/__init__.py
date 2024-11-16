@@ -14,6 +14,5 @@ engine = create_engine(DATABASE_URL, echo=True)
 # Vytvoření tabulek podle definovaných modelů
 Base.metadata.create_all(engine)
 
-# Vytvoření session pro práci s databází
 Session = sessionmaker(bind=engine)
 session = Session()
