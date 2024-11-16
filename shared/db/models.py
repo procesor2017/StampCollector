@@ -31,20 +31,22 @@ class StampBase(Base):
     photo_path_base = Column(String, nullable=False)
     name = Column(String, nullable=False)
 
-    emission_id = Column(Integer, ForeignKey('emission.emission_id'))
+    emission_id = Column(Integer, ForeignKey('emission.emission_id'), nullable=False)
     emission = relationship('Emission', back_populates='stamps')
 
+    stamp_types = relationship("StampTypeBase", back_populates="stamp")
 class StampTypeBase(Base):
     __tablename__ = 'stamp_type_base'
     
-    stamp_id = Column(Integer, ForeignKey('stamp_base.stamp_id'), primary_key=True)
-    photo_path_type = Column(String, nullable=False)
+    stamp_type_id = Column(Integer, primary_key=True)
+    stamp_id = Column(Integer, ForeignKey('stamp_base.stamp_id'), nullable=False)
+    photo_path_type = Column(String)
     description = Column(String)
-    type_name = Column(String, nullable=False)
-    color = Column(String, nullable=False)
-    paper = Column(String, nullable=False)
-    perforation = Column(String, nullable=False)
-    plate_flaw = Column(String, nullable=False)
+    type_name = Column(String)
+    color = Column(String)
+    paper = Column(String)
+    perforation = Column(String)
+    plate_flaw = Column(String)
     catalog_price_superb = Column(Float)
     catalog_price_extra_fine = Column(Float)
     catalog_price_very_fine = Column(Float)
@@ -52,3 +54,6 @@ class StampTypeBase(Base):
     catalog_price_avg = Column(Float)
     catalog_price_poor = Column(Float)
     catalog_price_post_cover = Column(Float)
+
+    # Relace pro hlavní známku
+    stamp = relationship("StampBase", back_populates="stamp_types")
