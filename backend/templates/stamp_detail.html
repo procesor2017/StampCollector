@@ -3,6 +3,10 @@
 {% block content %}
 <h2>Detail známky: {{ stamp.name }}</h2>
 
+<a href="{{ url_for('catalog', country=stamp.emission.country.name) }}" class="btn btn-secondary mb-4">
+    ← Zpět do katalogu ({{ stamp.emission.country.name }})
+</a>
+
 <img src="/images/{{ stamp.photo_path_base }}" alt="photo" width="200" class="mx-auto d-block">
 <table class="table mt-4">
     <thead>

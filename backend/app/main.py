@@ -84,12 +84,14 @@ def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 # Katalog známek
-@app.get("/catalog", response_class=HTMLResponse)
+@app.get("/catalog/{country}", response_class=HTMLResponse, name="catalog")
+@app.get("/catalog", response_class=HTMLResponse, name="catalog_no_country")
 def catalog(request: Request, country: str = None):
-    countries = crud.get_all_countries()  # Získání seznamu zemí z databáze
-    emissions = []
+    countries = crud.get_all_countries()  # Seznam všech zemí
     if country:
         emissions = crud.get_emissions_by_country(country)  # Filtr podle země
+    else:
+        emissions = crud.get_emissions_by_country(None)  # Pokud není země, nezobrazovat filtr
     return templates.TemplateResponse(
         "catalog.html",
         {"request": request, "countries": countries, "emissions": emissions, "selected_country": country},
