@@ -1,9 +1,18 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request, Depends
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 from shared.db import crud
 from pydantic import BaseModel
 from typing import List
 
+
+
+
 app = FastAPI()
+
+templates = Jinja2Templates(directory="backend/templates")
+app.mount("/static", StaticFiles(directory="backend/static"), name="static")
 
 # Pydantic model pro emisii
 class EmissionCreate(BaseModel):
@@ -39,6 +48,24 @@ class CountryResponse(CountryCreate):
     class Config:
         from_attributes = True
 
+# APi Endpoint with html poge
+@app.get("/", response_class=HTMLResponse)
+def index(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+# Katalog známek
+@app.get("/catalog", response_class=HTMLResponse)
+def catalog(request: Request, country: str = None):
+    countries = crud.get_all_countries()  # Získání seznamu zemí z databáze
+    emissions = []
+    if country:
+        emissions = crud.get_emissions_by_country(country)  # Filtr podle země
+    return templates.TemplateResponse(
+        "catalog.html",
+        {"request": request, "countries": countries, "emissions": emissions, "selected_country": country},
+    )
+
+# Endpoint for bootstrap or for working with data
 # Endpoint pro přidání emise
 @app.post("/emissions/", response_model=EmissionResponse)
 def create_emission(emission: EmissionCreate):

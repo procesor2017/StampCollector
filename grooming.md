@@ -1,7 +1,7 @@
 # What need to be done?
 Database (SQLite)
 Backend (python, fastapi)
-Frontend (Dont know which technology)
+Frontend (Combination => Python generate html and bootstrap doing others thing)
 
 # Requirements for using
 Adding Information:

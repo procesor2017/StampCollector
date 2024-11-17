@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Filatelie{% endblock %}</title>
+    <link rel="stylesheet" href="/static/bootstrap.min.css">
+</head>
+<body>
+    <header>
+        <div class="container-fluid bg-primary text-white p-3">
+            <h1>Informace</h1>
+        </div>
+    </header>
+    <div class="d-flex">
+        <nav class="bg-light p-3" style="width: 200px;">
+            <ul class="nav flex-column">
+                <li class="nav-item"><a class="nav-link" href="/">Hlavní stránka</a></li>
+                <li class="nav-item"><a class="nav-link" href="/catalog">Katalog</a></li>
+            </ul>
+        </nav>
+        <main class="p-4" style="flex-grow: 1;">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+</html>

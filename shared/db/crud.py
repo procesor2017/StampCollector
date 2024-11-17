@@ -14,6 +14,10 @@ def get_all_emissions():
 def get_emission_by_id(emission_id):
     return session.query(Emission).filter(Emission.emission_id == emission_id).first()
 
+def get_emissions_by_country(country):
+    country_id = get_country_by_name_and_return_id(country)
+    return session.query(Emission).filter(Emission.country_id == country_id).all()
+
 # Stamps
 # Basic Stamps
 def insert_stamp(catalog_number, photo_path_base, emission_id):
@@ -66,6 +70,11 @@ def get_country_by_id(country_id):
 def get_country_by_name(name):
     return session.query(Country).filter(Country.name == name).first()
 
+def get_country_by_name_and_return_id(name):
+    result = session.query(Country.country_id).filter(Country.name == name).first()
+    if result:
+        return result[0]  # vrací první (a jediné) pole, což je `country_id`
+    return None
 
 # Stamps via country Name
 def get_stamps_by_country(country_name):
