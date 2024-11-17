@@ -114,7 +114,7 @@ async def emission_detail(request: Request, emission_id: int):
     })
 
 # Detail pro známku
-@app.get("/stamps/{stamp_id}", response_class=HTMLResponse)
+@app.get("/stamps/{stamp_id}", response_class=HTMLResponse, name="stamp_detail")
 async def get_stamp_detail(request: Request, stamp_id: int):
     stamp = crud.get_stamp_by_id(stamp_id)
     if not stamp:
