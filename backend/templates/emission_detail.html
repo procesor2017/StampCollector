@@ -17,7 +17,9 @@
     <tbody>
         {% for stamp in stamps %}
         <tr>
-            <td>{{ stamp.name }}</td>
+            <td><a href="/stamps/{{ stamp.stamp_id }}" class="stamps-link">
+                {{ stamp.name }}
+            </a></td>
             <td>{{ stamp.catalog_number }}</td>
             <td><img src="/images/{{ stamp.photo_path_base }}" alt="photo" width="100"></td>
         </tr>

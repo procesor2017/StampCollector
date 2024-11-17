@@ -57,3 +57,24 @@ class StampTypeBase(Base):
 
     # Relace pro hlavní známku
     stamp = relationship("StampBase", back_populates="stamp_types")
+    
+    # Přidejte metodu pro převod na slovník
+    def as_dict(self):
+        return {
+            "stamp_type_id": self.stamp_type_id,
+            "stamp_id": self.stamp_id,
+            "photo_path_type": self.photo_path_type,
+            "description": self.description,
+            "type_name": self.type_name,
+            "color": self.color,
+            "paper": self.paper,
+            "perforation": self.perforation,
+            "plate_flaw": self.plate_flaw,
+            "catalog_price_superb": self.catalog_price_superb,
+            "catalog_price_extra_fine": self.catalog_price_extra_fine,
+            "catalog_price_very_fine": self.catalog_price_very_fine,
+            "catalog_price_fine": self.catalog_price_fine,
+            "catalog_price_avg": self.catalog_price_avg,
+            "catalog_price_poor": self.catalog_price_poor,
+            "catalog_price_post_cover": self.catalog_price_post_cover
+        }

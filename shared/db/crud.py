@@ -54,6 +54,9 @@ def get_all_stamp_types():
 def get_stamp_type_by_id(stamp_id):
     return session.query(StampTypeBase).filter(StampTypeBase.stamp_id == stamp_id).first()
 
+def get_all_stamp_type_by_id(stamp_id):
+    return session.query(StampTypeBase).filter(StampTypeBase.stamp_id == stamp_id).all()
+
 # Country
 def insert_country(name):
     new_country = Country(name=name)

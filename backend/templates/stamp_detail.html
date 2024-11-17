@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Detail známky{% endblock %}
+{% block content %}
+<h2>Detail známky: {{ stamp.name }}</h2>
+
+<table class="table mt-4">
+    <thead>
+        <tr>
+            <th>Název</th>
+            <td>{{ stamp.name }}</td>
+        </tr>
+        <tr>
+            <th>Katalogové číslo</th>
+            <td>{{ stamp.catalog_number }}</td>
+        </tr>
+        <tr>
+            <th>Rok vydání</th>
+            <td>{{ stamp.issue_year }}</td>
+        </tr>
+        <tr>
+            <th>Fotografie</th>
+            <td><img src="/images/{{ stamp.photo_path_base }}" alt="photo" width="200"></td>
+        </tr>
+    </thead>
+</table>
+
+<h3>Podtypy</h3>
+{% if subtypes %}
+<table class="table mt-4">
+    <thead>
+        <tr>
+            <th>Název podtypu</th>
+            <th>Popis</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for subtype in subtypes %}
+        <tr>
+            <td>{{ subtype.name }}</td>
+            <td>{{ subtype.description }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="mt-4">Žádné podtypy pro tuto známku.</p>
+{% endif %}
+{% endblock %}
