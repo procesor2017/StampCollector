@@ -3,6 +3,7 @@
 {% block content %}
 <h2>Detail známky: {{ stamp.name }}</h2>
 
+<img src="/images/{{ stamp.photo_path_base }}" alt="photo" width="200" class="mx-auto d-block">
 <table class="table mt-4">
     <thead>
         <tr>
@@ -15,11 +16,7 @@
         </tr>
         <tr>
             <th>Rok vydání</th>
-            <td>{{ stamp.issue_year }}</td>
-        </tr>
-        <tr>
-            <th>Fotografie</th>
-            <td><img src="/images/{{ stamp.photo_path_base }}" alt="photo" width="200"></td>
+            <td>{{ stamp.emission.issue_year }}</td>
         </tr>
     </thead>
 </table>
@@ -30,14 +27,36 @@
     <thead>
         <tr>
             <th>Název podtypu</th>
-            <th>Popis</th>
+            <th>Color</th>
+            <th>Photo</th>
+            <th>Paper</th>
+            <th>Perforation</th>
+            <th>Plate Flaw</th>
+            <th>Catalog price superb**</th>
+            <th>catalog price extra_fine</th>
+            <th>catalog price very_fine *</th>
+            <th>catalog price fine</th>
+            <th>catalog price avg (*)</th>
+            <th>catalog price poor</th>
+            <th>catalog price post cover</th>
         </tr>
     </thead>
     <tbody>
         {% for subtype in subtypes %}
         <tr>
-            <td>{{ subtype.name }}</td>
-            <td>{{ subtype.description }}</td>
+            <td>{{ subtype.type_name }}</td>
+            <td>{{ subtype.color }}</td>
+            <td>{{ subtype.photo_path_type }}</td>
+            <td>{{ subtype.paper }}</td>
+            <td>{{ subtype.perforation }}</td>
+            <td>{{ subtype.plate_flaw }}</td>
+            <td>{{ subtype.catalog_price_superb }}</td>
+            <td>{{ subtype.catalog_price_extra_fine }}</td>
+            <td>{{ subtype.catalog_price_very_fine }}</td>
+            <td>{{ subtype.catalog_price_fine }}</td>
+            <td>{{ subtype.catalog_price_avg }}</td>
+            <td>{{ subtype.catalog_price_poor }}</td>
+            <td>{{ subtype.catalog_price_post_cover }}</td>
         </tr>
         {% endfor %}
     </tbody>
