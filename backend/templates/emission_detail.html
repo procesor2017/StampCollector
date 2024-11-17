@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Detail emise{% endblock %}
+{% block content %}
+<h2>Detail emise: {{ emission.name }} ({{ emission.issue_year }})</h2>
+<p><strong>Země:</strong> {{ emission.country.name }}</p>
+
+<h3>Známky v této emisi</h3>
+{% if stamps %}
+<table class="table mt-4">
+    <thead>
+        <tr>
+            <th>Název</th>
+            <th>Katalogové číslo</th>
+            <th>Foto</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for stamp in stamps %}
+        <tr>
+            <td>{{ stamp.name }}</td>
+            <td>{{ stamp.catalog_number }}</td>
+            <td><img src="/images/{{ stamp.photo_path_base }}" alt="photo" width="100"></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="mt-4">Žádné známky pro tuto emisi.</p>
+{% endif %}
+{% endblock %}

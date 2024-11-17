@@ -13,6 +13,7 @@ app = FastAPI()
 
 templates = Jinja2Templates(directory="backend/templates")
 app.mount("/static", StaticFiles(directory="backend/static"), name="static")
+app.mount("/images", StaticFiles(directory="data/images"), name="images")
 
 # Pydantic model pro emisii
 class EmissionCreate(BaseModel):
@@ -64,6 +65,24 @@ def catalog(request: Request, country: str = None):
         "catalog.html",
         {"request": request, "countries": countries, "emissions": emissions, "selected_country": country},
     )
+
+# Detail emise
+@app.get("/emissions/{emission_id}", response_class=HTMLResponse)
+async def emission_detail(request: Request, emission_id: int):
+    # Získání emise podle ID
+    emission = crud.get_emission_by_id(emission_id)
+    if not emission:
+        raise HTTPException(status_code=404, detail="Emission not found")
+    
+    # Získání všech známek pro tuto emisi
+    stamps = crud.get_stamps_by_emission(emission.name)
+    
+    # Renderování detailu emise s listem známek
+    return templates.TemplateResponse("emission_detail.html", {
+        "request": request,
+        "emission": emission,
+        "stamps": stamps
+    })
 
 # Endpoint for bootstrap or for working with data
 # Endpoint pro přidání emise

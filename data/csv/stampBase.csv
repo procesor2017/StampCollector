@@ -1,9 +1,9 @@
 catalog_number,emission_id,name,country,photo_path_base
-1,1,1 Kr,Austria,images/austria/1850-1918/1Kr1850.png
-2,1,2 Kr,Austria,images/austria/1850-1918/2Kr1850.png
-3,1,3 Kr,Austria,images/austria/1850-1918/3Kr1850.png
-4,1,6 Kr,Austria,images/austria/1850-1918/6Kr1850.png
-5,1,9 Kr,Austria,images/austria/1850-1918/9Kr1850.png
+1,1,1 Kr,Austria,austria/1850-1918/1Kr1850.png
+2,1,2 Kr,Austria,austria/1850-1918/2Kr1850.png
+3,1,3 Kr,Austria,austria/1850-1918/3Kr1850.png
+4,1,6 Kr,Austria,austria/1850-1918/6Kr1850.png
+5,1,9 Kr,Austria,austria/1850-1918/9Kr1850.png
 6,24,"0,6 Kr",Austria,None
 7,24,6 Kr,Austria,None
 8,24,30 Kr ,Austria,None

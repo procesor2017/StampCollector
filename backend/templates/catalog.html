@@ -25,7 +25,7 @@
     <tbody>
         {% for emission in emissions %}
         <tr>
-            <td>{{ emission.name }}</td>
+            <td><a href="{{ url_for('emission_detail', emission_id=emission.emission_id) }}">{{ emission.name }}</a></td>
             <td>{{ emission.issue_year }}</td>
         </tr>
         {% endfor %}
