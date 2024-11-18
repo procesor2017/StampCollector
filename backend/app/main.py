@@ -5,6 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from shared.db import crud
 from pydantic import BaseModel
 from typing import List, Optional
+from fastapi.responses import RedirectResponse
 
 app = FastAPI()
 
@@ -130,6 +131,18 @@ async def get_stamp_detail(request: Request, stamp_id: int):
         "stamp": stamp,
         "subtypes": subtypes
     })
+
+@app.get("/search", response_class=HTMLResponse, name="search_results")
+def search_results(request: Request, query: str):
+    # Vyhledání známek podle názvu
+    stamps = crud.search_stamps_by_name(query)  # Implementace této metody je nutná
+    if len(stamps) == 1:
+        # Pokud je nalezena pouze jedna známka, přesměrovat přímo na její detail
+        return RedirectResponse(url=f"/stamps/{stamps[0].stamp_id}")
+    return templates.TemplateResponse(
+        "search_results.html",
+        {"request": request, "stamps": stamps, "query": query},
+    )
 
 # Endpoint for bootstrap or for working with data
 # Endpoint pro přidání emise

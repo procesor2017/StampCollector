@@ -11,6 +11,15 @@
     <header>
         <div class="container-fluid bg-primary text-white p-3">
             <h1>Informace</h1>
+            <form action="{{ url_for('search_results') }}" method="GET" class="d-flex">
+                <input 
+                    type="text" 
+                    name="query" 
+                    class="form-control me-2" 
+                    placeholder="Hledat známku..." 
+                    required>
+                <button type="submit" class="btn btn-light">Hledat</button>
+            </form>
         </div>
     </header>
     <div class="d-flex">

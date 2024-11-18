@@ -96,3 +96,10 @@ def get_stamps_by_emission(emission_name):
     if emission:
         return session.query(StampBase).filter(StampBase.emission_id == emission.emission_id).all()
     return []
+
+def search_stamps_by_name(query: str):
+    return (
+        session.query(StampBase)
+        .filter(StampBase.name.ilike(f"%{query}%"))
+        .all()
+    )

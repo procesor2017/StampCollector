@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Results{% endblock %}
+{% block content %}
+<h2>Results for: "{{ query }}"</h2>
+
+{% if stamps %}
+<div class="row text-center">
+    {% for stamp in stamps %}
+    <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <a href="{{ url_for('stamp_detail', stamp_id=stamp.stamp_id) }}" class="text-decoration-none">
+            <img src="/images/{{ stamp.photo_path_base }}" alt="{{ stamp.name }}" class="img-fluid rounded mb-2">
+            <p class="text-center text-truncate">{{ stamp.name }}</p>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p class="mt-4">Any stamp with this name</p>
+{% endif %}
+{% endblock %}
