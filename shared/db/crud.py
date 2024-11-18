@@ -1,5 +1,5 @@
 from . import session
-from .models import Emission, StampBase, StampTypeBase, Country
+from .models import Emission, StampBase, StampTypeBase, Country, AuctionSale
 
 # Emissions
 def insert_emission(name, country, issue_year):
@@ -103,3 +103,19 @@ def search_stamps_by_name(query: str):
         .filter(StampBase.name.ilike(f"%{query}%"))
         .all()
     )
+
+# Přidání nové aukce
+def add_auction(stamp_type_id: int, price: float, url: str, description: str):
+    auction = AuctionSale(
+        stamp_type_id=stamp_type_id,
+        price=price,
+        url=url,
+        description=description
+    )
+    session.add(auction)
+    session.commit()
+    return auction
+
+# Získání všech aukcí pro daný typ známky
+def get_auctions_by_stamp_type(stamp_type_id: int):
+    return session.query(AuctionSale).filter(AuctionSale.stamp_type_id == stamp_type_id).all()

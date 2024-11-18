@@ -67,6 +67,11 @@ class StampTypeBaseResponse(BaseModel):
     class Config:
         from_attributes = True
 
+class AuctionSale(BaseModel):
+    stamp_type_id: int
+    sale_price: int
+    sale_url: str
+    description: str
 
 class StampBaseResponse(BaseModel):
     stamp_id: int
@@ -119,6 +124,7 @@ async def emission_detail(request: Request, emission_id: int):
 # Detail pro známku
 @app.get("/stamps/{stamp_id}", response_class=HTMLResponse, name="stamp_detail")
 async def get_stamp_detail(request: Request, stamp_id: int):
+    # Získání detailu známky
     stamp = crud.get_stamp_by_id(stamp_id)
     if not stamp:
         raise HTTPException(status_code=404, detail="Stamp not found")
@@ -126,10 +132,17 @@ async def get_stamp_detail(request: Request, stamp_id: int):
     # Získání podtypů pro známku
     subtypes = crud.get_all_stamp_type_by_id(stamp_id)
 
+    # Získání aukcí pro každý podtyp známky
+    auctions_by_subtype = {
+        subtype.stamp_type_id: crud.get_auctions_by_stamp_type(subtype.stamp_type_id)
+        for subtype in subtypes
+    }
+
     return templates.TemplateResponse("stamp_detail.html", {
         "request": request,
         "stamp": stamp,
-        "subtypes": subtypes
+        "subtypes": subtypes,
+        "auctions_by_subtype": auctions_by_subtype
     })
 
 @app.get("/search", response_class=HTMLResponse, name="search_results")
@@ -236,3 +249,13 @@ def get_stamp_detail(stamp_id: int):
         emission_id=stamp.emission_id,
         stamp_types=[StampTypeBaseResponse(**subtype.as_dict()) for subtype in subtypes]
     )
+
+@app.post("/api/auctions")
+def create_auction(stamp_type_id: int, price: float, url: str, description: str):
+    auction = crud.add_auction(stamp_type_id, price, url, description)
+    return {"message": "Auction added", "auction": auction}
+
+@app.get("/api/auctions/{stamp_type_id}")
+def get_auctions(stamp_type_id: int):
+    auctions = crud.get_auctions_by_stamp_type(stamp_type_id)
+    return {"auctions": auctions}

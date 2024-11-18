@@ -57,6 +57,7 @@ class StampTypeBase(Base):
 
     # Relace pro hlavní známku
     stamp = relationship("StampBase", back_populates="stamp_types")
+    auction_sales = relationship("AuctionSale", back_populates="stamp_type")
     
     # Přidejte metodu pro převod na slovník
     def as_dict(self):
@@ -78,3 +79,15 @@ class StampTypeBase(Base):
             "catalog_price_poor": self.catalog_price_poor,
             "catalog_price_post_cover": self.catalog_price_post_cover
         }
+    
+class AuctionSale(Base):
+    __tablename__ = 'auction_sale'
+
+    sale_id = Column(Integer, primary_key=True)  # Primární klíč
+    stamp_type_id = Column(Integer, ForeignKey('stamp_type_base.stamp_type_id'), nullable=False)  # Vazba na StampTypeBase
+    sale_price = Column(Float, nullable=False)  # Cena za prodej
+    sale_url = Column(String, nullable=False)  # URL na aukční prodej
+    description = Column(String, nullable=True)  # Popis aukce (např. stav, rarita, poznámky)
+
+    # Vazba zpět na StampTypeBase
+    stamp_type = relationship("StampTypeBase", back_populates="auction_sales")

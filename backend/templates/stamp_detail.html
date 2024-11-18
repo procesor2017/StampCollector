@@ -68,4 +68,36 @@
 {% else %}
 <p class="mt-4">Žádné podtypy pro tuto známku.</p>
 {% endif %}
+
+<h3>Aukce</h3>
+{% if auctions_by_subtype %}
+    {% for subtype_id, auctions in auctions_by_subtype.items() %}
+    <h4>Pro podtyp {{ (subtypes | selectattr('stamp_type_id', 'equalto', subtype_id) | first).type_name }}</h4>
+        {% if auctions %}
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th>Cena</th>
+                    <th>URL</th>
+                    <th>Popis</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for auction in auctions %}
+                <tr>
+                    <td>{{ auction.price }} Kč</td>
+                    <td><a href="{{ auction.url }}" target="_blank">Odkaz</a></td>
+                    <td>{{ auction.description }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="mt-4">Pro tento podtyp nejsou žádné aukce.</p>
+        {% endif %}
+    {% endfor %}
+{% else %}
+<p class="mt-4">Žádné aukce pro tuto známku.</p>
+{% endif %}
+
 {% endblock %}
