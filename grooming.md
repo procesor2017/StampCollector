@@ -5,8 +5,7 @@ Frontend (Combination => Python generate html and bootstrap doing others thing)
 
 # Requirements for using
 Adding Information:
-    - Reading information from auction house
-        - Burda
+    - Reading information from auction house public pdf and save them to database
     - Adding information manualy
 
 Usage:
