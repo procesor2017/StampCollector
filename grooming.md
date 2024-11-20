@@ -6,6 +6,7 @@ Frontend (Combination => Python generate html and bootstrap doing others thing)
 # Requirements for using
 Adding Information:
     - Reading information from auction house public pdf and save them to database
+        - It takes lot of time to do it with automation so for now is dead
     - Adding information manualy
 
 Usage:
@@ -50,4 +51,11 @@ emission_id
 name
 country
 issue_year
+
+Sale table
+stamp_id
+start_price
+finaly price
+strip or just one stamp
+cover or not
 
