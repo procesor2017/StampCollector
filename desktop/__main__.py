@@ -66,7 +66,7 @@ class EmissionScreen(Screen):
                 MDRoundFlatIconButton(
                     text=f'{match.name} ({match.issue_year})',
                     icon="magnify",
-                    on_release=lambda btn, m=match: self.on_emission_selected(m),
+                    on_release=lambda x=match.emission_id, m=match: self.on_emission_selected(m),
                 )
             )
 
