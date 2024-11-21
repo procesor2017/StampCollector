@@ -1,32 +1,43 @@
 #:kivy 1.2.0
-<MDFlatButton>:
-    md_bg_color: 0,0,0,0
+<MDRoundFlatIconButton>:
     theme_text_color: "Custom"
     text_color: 0.89, 0.35, 0, 1
     font_size: "18sp"
+    theme_icon_color: "Custom"
+    icon_color: [0.89, 0.35, 0, 1]
+    line_color: 0,0,0,0 
+    md_bg_color: 0, 0,0, 0.1
+
 
 <MDBoxLayout>:
-    md_bg_color: 0, 0, 0, 1
+    md_bg_color: 1, 1,1, 0.1
 
 
 <MainLayout>:
     orientation: "horizontal"
+    md_bg_color: 0,0,0,1
     # Levé menu
     MDBoxLayout:
         size_hint: None, None
         size: self.minimum_size
         orientation: "vertical"
-        size_hint_x: 0.2
+        size_hint_x: 0.25
         spacing: 15
         padding: [20, 20]
         pos_hint: {"top": 1,"center_x":.5}
         
-        MDFlatButton:
+        
+        MDRoundFlatIconButton:
             text: "Home"
+            icon: "home-account"
+            size_hint_x: 1
             on_release: app.root.ids.screen_manager.current = "Home"
+            
 
-        MDFlatButton:
+        MDRoundFlatIconButton:
             text: "Emission"
+            icon: "folder"
+            size_hint_x: 1
             on_release: app.root.ids.screen_manager.current = "Emission"
 
     # Pravá část s obrazovkami
