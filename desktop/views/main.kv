@@ -1,13 +1,12 @@
 #:kivy 1.2.0
-<MDRoundFlatIconButton>:
+<HoverButton>:
     theme_text_color: "Custom"
-    text_color: 0.89, 0.35, 0, 1
+    text_color: self.color_text
     font_size: "18sp"
     theme_icon_color: "Custom"
-    icon_color: [0.89, 0.35, 0, 1]
+    icon_color: self.color_text
     line_color: 0,0,0,0 
-    md_bg_color: 0, 0,0,0
-    
+    md_bg_color: 0,0,0,0
 
 
 <MainLayout>:
@@ -31,17 +30,17 @@
                 halign: "center"
                 size_hint_y: 0.1
             
-            MDRoundFlatIconButton:
+            HoverButton:
                 text: "Home"
-                icon: "home-account"
                 size_hint_x: 1
                 on_release: app.root.ids.screen_manager.current = "Home"
                 
-            MDRoundFlatIconButton:
+            HoverButton:
                 text: "Emission"
-                icon: "folder"
                 size_hint_x: 1
                 on_release: app.root.ids.screen_manager.current = "Emission"
+
+
             MDBoxLayout:
                 size_hint_y: 1
 
