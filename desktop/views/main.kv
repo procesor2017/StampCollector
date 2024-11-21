@@ -1,37 +1,57 @@
-#:kivy 2.3.0
-<MainLayout>:
-    cols: 2
-    rows: 1
-    #Left menu
-    GridLayout:
-        cols: 1  # Menu s tlačítky v jednom sloupci
-        size_hint_x: 0.2  # Šířka levého menu (20 % obrazovky)
-        spacing: 10
-        padding: 10
+#:kivy 1.2.0
+<MDFlatButton>:
+    md_bg_color: 0,0,0,0
+    theme_text_color: "Custom"
+    text_color: 0.89, 0.35, 0, 1
+    font_size: "18sp"
 
-        Button:
+<MDBoxLayout>:
+    md_bg_color: 0, 0, 0, 1
+
+
+<MainLayout>:
+    orientation: "horizontal"
+    # Levé menu
+    MDBoxLayout:
+        size_hint: None, None
+        size: self.minimum_size
+        orientation: "vertical"
+        size_hint_x: 0.2
+        spacing: 15
+        padding: [20, 20]
+        pos_hint: {"top": 1,"center_x":.5}
+        
+        MDFlatButton:
             text: "Home"
             on_release: app.root.ids.screen_manager.current = "Home"
-        Button:
+
+        MDFlatButton:
             text: "Emission"
             on_release: app.root.ids.screen_manager.current = "Emission"
 
-    # Right side
+    # Pravá část s obrazovkami
     ScreenManager:
         id: screen_manager
         HomeScreen:
             name: "Home"
+
         EmissionScreen:
             name: "Emission"
 
-<HomeScreen>
+<HomeScreen>:
     BoxLayout:
         orientation: "vertical"
         Label:
-            text: "HomeScreen pravá část"
+            text: "Home Screen pravá část"
+            font_size: 24
+            halign: "center"
+            valign: "middle"
 
-<EmissionScreen>
+<EmissionScreen>:
     BoxLayout:
         orientation: "vertical"
         Label:
             text: "Emission Screen pravá část"
+            font_size: 24
+            halign: "center"
+            valign: "middle"

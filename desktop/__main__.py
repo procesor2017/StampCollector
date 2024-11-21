@@ -1,16 +1,16 @@
 from kivymd.app import MDApp
 from kivy.lang import Builder
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.screenmanager import Screen
+from kivymd.uix.screen import Screen
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivy.uix.screenmanager import ScreenManager
 
+# Definování barevného schématu
 class MainApp(MDApp):
     def build(self):
         Builder.load_file('views/main.kv')
-        self.theme_cls.primary_palette = "Orange"
-        self.theme_cls.theme_style = "Dark"  # Dark nebo Light
         return MainLayout()
 
-class MainLayout(GridLayout):
+class MainLayout(MDBoxLayout):
     pass
 
 class HomeScreen(Screen):
