@@ -66,26 +66,7 @@
 
         # Pravá část s obrazovkami
         ScreenManager:
-            id: screen_manager
-            canvas.before:
-                # Rámeček
-                Color:
-                    rgba: 0.89, 0.35, 0, 1
-                Line:
-                    rounded_rectangle: self.x, self.y, self.width, self.height, 5
-                    width: 2
-
-                # inside
-                Color:
-                    rgba: 1, 1, 1, 0.12  # Barva pozadí (průhledná bílá)
-                RoundedRectangle:
-                    pos: self.pos 
-                    size: self.size 
-                    radius: [5]
-
-
-
-                
+            id: screen_manager               
             HomeScreen:
                 name: "Home"
             EmissionScreen:
@@ -99,19 +80,35 @@
         
 
 <HomeScreen>:
-    BoxLayout:
-        orientation: "vertical"
-        Label:
-            text: "Home Screen pravá část"
-            font_size: 24
-            halign: "center"
-            valign: "middle"
+    MDCard:
+        size_hint: 1,1
+        border_radius: 20
+        radius: [15]
+        md_bg_color: 1,1,1,0.08
+        elevation: 4
+        line_width: 1
+        line_color: (1, 1, 1, 0.15)
+        BoxLayout:
+            orientation: "vertical"
+            Label:
+                text: "Home Screen pravá část"
+                font_size: 24
+                halign: "center"
+                valign: "middle"
 
 <EmissionScreen>:
-    BoxLayout:
-        orientation: "vertical"
-        Label:
-            text: "Emission Screen pravá část"
-            font_size: 24
-            halign: "center"
-            valign: "middle"
+    MDCard:
+        size_hint: 1,1
+        border_radius: 20
+        radius: [15]
+        md_bg_color: 1,1,1,0.08
+        elevation: 4
+        line_width: 1
+        line_color: (1, 1, 1, 0.15)
+        BoxLayout:
+            orientation: "vertical"
+            Label:
+                text: "Emission Screen pravá část"
+                font_size: 24
+                halign: "center"
+                valign: "middle"
