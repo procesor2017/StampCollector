@@ -7,47 +7,69 @@
     icon_color: [0.89, 0.35, 0, 1]
     line_color: 0,0,0,0 
     md_bg_color: 0, 0,0,0
+    
 
 
 <MainLayout>:
     orientation: "horizontal"
     md_bg_color: 0,0,0,1
-    # Levé menu
+            
+    # LEvé menu
     MDBoxLayout:
-        size_hint_x: 0.02
-    MDBoxLayout:
-        size_hint: None, None
-        size: self.minimum_size
         orientation: "vertical"
-        size_hint_x: 0.25
         spacing: 15
         padding: [10, 20, 10, 20]
-        md_bg_color: 1, 1,1, 0.1
-        pos_hint: {"top": 0.9}
-        radius: [5,] 
-        
-        
-        MDRoundFlatIconButton:
-            text: "Home"
-            icon: "home-account"
-            size_hint_x: 1
-            on_release: app.root.ids.screen_manager.current = "Home"
+        # md_bg_color: 1, 1,1, 0.1
+        radius: [5,]
+        size_hint_x: 0.25
+        size_hint_y: 0.98
+
+        MDBoxLayout:
+            orientation: "vertical"
+            MDLabel:
+                text: "Logo"
+                halign: "center"
+                size_hint_y: 0.1
             
+            MDRoundFlatIconButton:
+                text: "Home"
+                icon: "home-account"
+                size_hint_x: 1
+                on_release: app.root.ids.screen_manager.current = "Home"
+                
+            MDRoundFlatIconButton:
+                text: "Emission"
+                icon: "folder"
+                size_hint_x: 1
+                on_release: app.root.ids.screen_manager.current = "Emission"
+            MDBoxLayout:
+                size_hint_y: 1
 
-        MDRoundFlatIconButton:
-            text: "Emission"
-            icon: "folder"
-            size_hint_x: 1
-            on_release: app.root.ids.screen_manager.current = "Emission"
+    MDBoxLayout:
+        orientation: "vertical"
+        # Top tab
+        MDBoxLayout:
+            orientation: "horizontal"
+            size_hint_y: 0.1
+            MDBoxLayout:
+                size_hint_x: 0.32
+            MDTextField:
+                hint_text: "Stamps search"
+                mode: "round"
+                max_text_length: 15
+                helper_text: "Helper text for fun"
+                size_hint_x: 0.35
+            MDBoxLayout:
+                size_hint_x: 0.32
 
-    # Pravá část s obrazovkami
-    ScreenManager:
-        id: screen_manager
-        HomeScreen:
-            name: "Home"
+        # Pravá část s obrazovkami
+        ScreenManager:
+            id: screen_manager
+            HomeScreen:
+                name: "Home"
 
-        EmissionScreen:
-            name: "Emission"
+            EmissionScreen:
+                name: "Emission"
 
 <HomeScreen>:
     BoxLayout:
