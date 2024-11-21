@@ -1,0 +1,37 @@
+#:kivy 2.3.0
+<MainLayout>:
+    cols: 2
+    rows: 1
+    #Left menu
+    GridLayout:
+        cols: 1  # Menu s tlačítky v jednom sloupci
+        size_hint_x: 0.2  # Šířka levého menu (20 % obrazovky)
+        spacing: 10
+        padding: 10
+
+        Button:
+            text: "Home"
+            on_release: app.root.ids.screen_manager.current = "Home"
+        Button:
+            text: "Emission"
+            on_release: app.root.ids.screen_manager.current = "Emission"
+
+    # Right side
+    ScreenManager:
+        id: screen_manager
+        HomeScreen:
+            name: "Home"
+        EmissionScreen:
+            name: "Emission"
+
+<HomeScreen>
+    BoxLayout:
+        orientation: "vertical"
+        Label:
+            text: "HomeScreen pravá část"
+
+<EmissionScreen>
+    BoxLayout:
+        orientation: "vertical"
+        Label:
+            text: "Emission Screen pravá část"

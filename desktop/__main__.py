@@ -1,15 +1,24 @@
-from kivy.app import App
-from kivy.uix.screenmanager import ScreenManager, Screen
-from desktop.controllers.main_screen import MainScreen  # Import pro obrazovku
+from kivymd.app import MDApp
 from kivy.lang import Builder
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.screenmanager import Screen
 
-class StampApp(App):
+class MainApp(MDApp):
     def build(self):
-        Builder.load_file('desktop/views/main_screen.kv')
-        sm = ScreenManager()  # Vytvoření screen manageru pro přepínání obrazovek
-        sm.add_widget(MainScreen(name="main"))  
-        sm.current = "main"
-        return sm
+        Builder.load_file('views/main.kv')
+        self.theme_cls.primary_palette = "Orange"
+        self.theme_cls.theme_style = "Dark"  # Dark nebo Light
+        return MainLayout()
 
-if __name__ == "__main__":
-    StampApp().run()  # Spuštění aplikace
+class MainLayout(GridLayout):
+    pass
+
+class HomeScreen(Screen):
+    pass
+
+class EmissionScreen(Screen):
+    pass
+
+if __name__ == '__main__':
+    app = MainApp()
+    app.run()

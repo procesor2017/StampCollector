@@ -18,6 +18,13 @@ def get_emissions_by_country(country):
     country_id = get_country_by_name_and_return_id(country)
     return session.query(Emission).filter(Emission.country_id == country_id).all()
 
+# For desktop app
+def get_emissions_by_country(country_name):
+    country = session.query(Country).filter(Country.name == country_name).first()
+    if country:
+        return session.query(Emission).filter(Emission.country_id == country.country_id).all()
+    return []
+
 # Stamps
 # Basic Stamps
 def insert_stamp(catalog_number, photo_path_base, emission_id):
