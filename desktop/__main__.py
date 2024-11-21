@@ -6,6 +6,9 @@ from kivymd.uix.button import MDRoundFlatIconButton
 from kivymd.uix.behaviors import HoverBehavior
 from shared.db import crud
 from kivymd.uix.menu import MDDropdownMenu
+from kivy.uix.image import AsyncImage
+from kivymd.uix.label import MDLabel
+from kivymd.uix.expansionpanel import MDExpansionPanel, MDExpansionPanelOneLine
 
 # Definování barevného schématu
 class MainApp(MDApp):
@@ -55,24 +58,31 @@ class EmissionScreen(Screen):
     def filter_emissions_by_country(self, country_name):
         """Filter emissions based on the selected country."""
         results_box = self.ids.results_box
-        results_box.clear_widgets()  # Clear previous results
+        results_box.clear_widgets()
 
-        # Find matches for the selected country
         matches = crud.get_emissions_by_country(country_name)
+        self.display_results(matches)
 
-        # Display results
+    def display_results(self, matches):
+        """
+        Výsledky.
+        """
+        results_box = self.ids.results_box
+        results_box.clear_widgets()
+
         for match in matches:
-            results_box.add_widget(
-                MDRoundFlatIconButton(
-                    text=f'{match.name} ({match.issue_year})',
-                    icon="magnify",
-                    on_release=lambda x=match.emission_id, m=match: self.on_emission_selected(m),
+            expansionPanel = MDExpansionPanel(
+                    content=Content(match),
+                    panel_cls=MDExpansionPanelOneLine(
+                        text=f"{match.name}",),  # panel class
                 )
-            )
-
-    def on_emission_selected(self, emission):
-        """Handle selection of an emission."""
-        print(f"Selected emission: {emission}")
+            results_box.add_widget(expansionPanel)
+""" 
+    def on_stamp_selected(match, touch, instance):
+        if instance.collide_point(*touch.pos):
+            print(f"Selected stamp: {match.stamp_name} (ID: {match.stamp_id})")
+            # Zde lze přejít na detailní stránku známky
+            # Např. změna obrazovky nebo načtení detailu """
 
 class HoverButton(MDRoundFlatIconButton, HoverBehavior):
     color_text = 1,1,1,1
@@ -81,6 +91,62 @@ class HoverButton(MDRoundFlatIconButton, HoverBehavior):
 
     def on_leave(self):
         self.text_color = 1,1,1,1
+
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.label import MDLabel
+from kivy.uix.image import AsyncImage
+
+# Obsah panelu
+class Content(MDBoxLayout):
+    def __init__(self, emission, **kwargs):
+        super().__init__(**kwargs)
+        self.orientation = "horizontal"
+        self.adaptive_height = True
+
+        stamps_for_emission = crud.get_stamps_by_emission(emission.name)
+        # stamps_for_emission[0].
+
+        for match in stamps_for_emission:
+        # Přidání obrázku známky
+            stamp_image = AsyncImage(
+                source=match.photo_path_base,  # URL obrázku emise
+                size_hint=(1, None),
+                height=200,
+                allow_stretch=True,
+                keep_ratio=True
+            )
+            self.add_widget(stamp_image)
+
+            # Přidání popisku
+            label = MDLabel(
+                text=f"Název: {match.name}\nRok: {match.emission}",
+                halign="center",
+                size_hint_y=None,
+                height=50,
+            )
+            self.add_widget(label)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if __name__ == '__main__':
     app = MainApp()
