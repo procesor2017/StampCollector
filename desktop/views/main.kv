@@ -61,14 +61,42 @@
             MDBoxLayout:
                 size_hint_x: 0.32
 
+        MDBoxLayout:
+            size_hint_y: 0.02
+
         # Pravá část s obrazovkami
         ScreenManager:
             id: screen_manager
+            canvas.before:
+                # Rámeček
+                Color:
+                    rgba: 0.89, 0.35, 0, 1
+                Line:
+                    rounded_rectangle: self.x, self.y, self.width, self.height, 5
+                    width: 2
+
+                # inside
+                Color:
+                    rgba: 1, 1, 1, 0.12  # Barva pozadí (průhledná bílá)
+                RoundedRectangle:
+                    pos: self.pos 
+                    size: self.size 
+                    radius: [5]
+
+
+
+                
             HomeScreen:
                 name: "Home"
-
             EmissionScreen:
                 name: "Emission"
+        
+        MDBoxLayout:
+            size_hint_y: 0.02
+
+    MDBoxLayout:
+        size_hint_x: 0.02
+        
 
 <HomeScreen>:
     BoxLayout:
