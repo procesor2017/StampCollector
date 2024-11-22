@@ -1,11 +1,4 @@
 #:kivy 1.2.0
-ScreenManager:
-    id: screen_manager
-    MainLayout:
-    HomeScreen:
-    EmissionScreen:
-
-
 <HoverButton>:
     theme_text_color: "Custom"
     text_color: self.color_text
@@ -15,6 +8,7 @@ ScreenManager:
     line_color: 0,0,0,0 
     md_bg_color: 0,0,0,0
 
+<ClickableBox>:
 
 <MainLayout>:
     orientation: "horizontal"
@@ -78,6 +72,9 @@ ScreenManager:
                 name: "Home"
             EmissionScreen:
                 name: "Emission"
+            StampScreen:
+                name: "Stamp"
+        
         
         MDBoxLayout:
             size_hint_y: 0.02
@@ -86,12 +83,14 @@ ScreenManager:
         size_hint_x: 0.02
     
     # Right panel for stamps:
-    MDBoxLayout:
+    ClickableBox:
         id: right_panel
         orientation: "vertical"
         size_hint_x: 0  # Standardně skrytý nastavení je pak pod on release na .45
         size_hint_y: 0.92
         padding: 10
+        on_release: app.root.ids.screen_manager.current = "StampScreen"
+
         MDBoxLayout:
             md_bg_color: 1, 1, 1, 1
             orientation: "vertical"
@@ -219,3 +218,20 @@ ScreenManager:
                 id: results_box
                 orientation: "vertical"
                 adaptive_height: True         
+
+<StampScreen>:
+    MDCard:
+        size_hint: 1,1
+        border_radius: 20
+        radius: [15]
+        md_bg_color: 1,1,1,0.08
+        elevation: 4
+        line_width: 1
+        line_color: (1, 1, 1, 0.15)
+        BoxLayout:
+            orientation: "vertical"
+            Label:
+                text: "Stamp screen středová část"
+                font_size: 24
+                halign: "center"
+                valign: "middle"

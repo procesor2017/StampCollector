@@ -85,6 +85,9 @@ class EmissionScreen(Screen):
                 )
             results_box.add_widget(expansionPanel)
 
+class StampScreen(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
 class HoverButton(MDRoundFlatIconButton, HoverBehavior):
     color_text = 1,1,1,1
@@ -94,6 +97,8 @@ class HoverButton(MDRoundFlatIconButton, HoverBehavior):
     def on_leave(self):
         self.text_color = 1,1,1,1
 
+class ClickableBox(ButtonBehavior, MDBoxLayout):
+    pass
 
 class Content(MDBoxLayout):
     def __init__(self, emission,**kwargs):
