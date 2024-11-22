@@ -1,7 +1,6 @@
 from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivymd.uix.screen import Screen
-from kivymd.uix.screenmanager import ScreenManager
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRoundFlatIconButton
 from kivymd.uix.behaviors import HoverBehavior
@@ -95,12 +94,6 @@ class HoverButton(MDRoundFlatIconButton, HoverBehavior):
     def on_leave(self):
         self.text_color = 1,1,1,1
 
-from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.label import MDLabel
-from kivy.uix.image import AsyncImage
-
-# Obsah panelu
-from kivy.uix.gridlayout import GridLayout
 
 class Content(MDBoxLayout):
     def __init__(self, emission,**kwargs):
@@ -114,7 +107,7 @@ class Content(MDBoxLayout):
             cols=3,
             row_default_height="150dp",
             row_force_default=True,
-            spacing="10dp",  # Mezera mezi obrázky
+            spacing="10dp",
             size_hint_y=None,
         )
 
@@ -167,20 +160,22 @@ class ImageWithText(ButtonBehavior, RelativeLayout):
     def on_release(self):
         app = MDApp.get_running_app()
         right_panel = app.root.ids.right_panel
-        panel_label = app.root.ids.panel_label  # Label, kam se zobrazují informace
+        stamp_name = app.root.ids.stamp_name
+        stamp_photo = app.root.ids.right_panel_md3card_tamp_image
 
         # Získat aktuální text v panelu
-        current_text = panel_label.text
-        new_text = self.label.text  # Nový text na základě aktuální známky
+        current_text = stamp_name.text
+        new_text = self.label.text
 
         if right_panel:
             if right_panel.size_hint_x == 0:  # Pokud je panel skrytý, zobrazí ho
-                animation = Animation(size_hint_x=0.3, duration=0.3)
+                animation = Animation(size_hint_x=0.45, duration=0.3)
                 animation.start(right_panel)
-                panel_label.text = new_text  # Aktualizace textu
+                stamp_name.text = new_text  # Aktualizace textu
+                stamp_photo.source = self.image.source
             else:
                 if current_text != new_text:  # Pokud se data změnila, aktualizujte je
-                    panel_label.text = new_text
+                    stamp_name.text = new_text
                 else:  # Pokud se data nezměnila, zavřete panel
                     animation = Animation(size_hint_x=0, duration=0.3)
                     animation.start(right_panel)

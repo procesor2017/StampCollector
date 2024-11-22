@@ -88,24 +88,80 @@ ScreenManager:
     # Right panel for stamps:
     MDBoxLayout:
         id: right_panel
-        size_hint_x: 0  # Standardně skrytý
-        md_bg_color: 1, 1, 1, 1
         orientation: "vertical"
-        padding: [10, 10, 10, 10]
-
-        MDLabel:
-            id: panel_label
-            text: "Informace"
-            halign: "center"
-            valign: "middle"
-            font_size: "18sp"
-
+        size_hint_x: 0  # Standardně skrytý nastavení je pak pod on release na .45
+        size_hint_y: 0.92
+        padding: 10
         MDBoxLayout:
+            md_bg_color: 1, 1, 1, 1
             orientation: "vertical"
-            MDLabel:
-                text: "Tady budou detaily o známce."
-                halign: "center"
-        
+            padding: [10, 10, 10, 10]
+            border_radius: 20
+            radius: [15]
+            md_bg_color: 1,1,1,0.08
+            elevation: 4
+            line_width: 1
+            line_color: (1, 1, 1, 0.15)
+            orientation: "vertical"
+            spacing: 15
+
+            # Informace o známce
+            MDBoxLayout:
+                size_hint: (1, 0.45)
+                orientation: "vertical"
+                spacing: 1
+                FitImage:
+                    id: right_panel_md3card_tamp_image
+                    size_hint: (1, 0.8)
+                    source: None
+                    radius: [15, 15, 15, 15]
+                    allow_stretch: True
+                    keep_ratio: True
+                    pos_hint: {"top":1}
+
+                MDLabel:
+                    id: stamp_name
+                    text: "Stamp name"
+                    halign: "left"
+                    valign: "middle"
+                    font_size: "18sp"
+                    theme_text_color: "Custom"
+                    text_color: 1,1,1,1
+                    size_hint: 1, 0.1
+
+                MDLabel:
+                    text: "Tady budou detaily o známce."
+                    text_size: self.size
+                    halign: "left"
+                    theme_text_color: "Custom"
+                    text_color: 1,1,1,1
+                    size_hint: 1, 0.2
+
+            MDCard:
+                size_hint: (1, 0.25)
+                orientation: "vertical"
+                border_radius: 20
+                radius: [15]
+                md_bg_color: 1,1,1,0.08
+                elevation: 2
+                line_width: 1
+                line_color: (1, 1, 1, 0.15)
+                MDLabel:
+                    id: stamp_type_enum
+                    text: "Počet pod typu"
+                    halign: "center"
+                    valign: "middle"
+                    theme_text_color: "Custom"
+                    text_color: 1,1,1,1
+                    
+                MDLabel:
+                    id: stamp_type_enum
+                    text: "Počet uložených prodeju v DB"
+                    halign: "center"
+                    valign: "middle"
+                    theme_text_color: "Custom"
+                    text_color: 1,1,1,1
+
 
 <HomeScreen>:
     MDCard:
