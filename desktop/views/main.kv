@@ -9,6 +9,8 @@
     md_bg_color: 0,0,0,0
 
 <ClickableBox>:
+<ParallaxScroll>:
+
 
 <MainLayout>:
     orientation: "horizontal"
@@ -220,18 +222,78 @@
                 adaptive_height: True         
 
 <StampScreen>:
-    MDCard:
-        size_hint: 1,1
-        border_radius: 20
-        radius: [15]
-        md_bg_color: 1,1,1,0.08
-        elevation: 4
-        line_width: 1
-        line_color: (1, 1, 1, 0.15)
-        BoxLayout:
-            orientation: "vertical"
-            Label:
-                text: "Stamp screen středová část"
-                font_size: 24
-                halign: "center"
-                valign: "middle"
+    ParallaxScroll:
+        bg_image: bg  # Napojení ID na atribut bg_image
+        size_hint: 1, 1  # Zajistí plnou velikost widgetu
+        pos: 0,0
+        # Hlavní BoxLayout
+        MDBoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+            height: self.minimum_height  # Automatická výška podle obsahu
+
+            # Pozadí obrázku
+            Image:
+                id: bg  # Nastavení ID pro napojení na Python
+                pos: self.pos
+                source: "./data/images/austria/1850-1918/1Kr1850.png"
+                allow_stretch: True
+                keep_ratio: False
+                size_hint_y: None
+                height: dp(300)  # Nastavení pevné výšky obrázku
+                opacity: 1  # Na začátku je pozadí plně neprůhledné
+                canvas.before:
+        # Zajistí, že obrázek bude vykreslen pod ostatním obsahem
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+                        source: self.source
+
+            MDBoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height  # Automatická výška podle obsahu
+                spacing: dp(50)
+                
+                # Obsah
+                MDLabel:
+                    theme_text_color: "Custom"
+                    text_color: 1, 1, 1, 1
+                    text: "Toto je obsah 1"
+                    size_hint_y: None
+                    height: 50
+
+                MDLabel:
+                    theme_text_color: "Custom"
+                    text_color: 1, 1, 1, 1
+                    text: "Toto je obsah 2"
+                    size_hint_y: None
+                    height: 50
+                
+                MDLabel:
+                    theme_text_color: "Custom"
+                    text_color: 1, 1, 1, 1
+                    text: "Toto je obsah 2"
+                    size_hint_y: None
+                    height: 50
+                # Obsah
+                MDLabel:
+                    theme_text_color: "Custom"
+                    text_color: 1, 1, 1, 1
+                    text: "Toto je obsah 1"
+                    size_hint_y: None
+                    height: 50
+
+                MDLabel:
+                    theme_text_color: "Custom"
+                    text_color: 1, 1, 1, 1
+                    text: "Toto je obsah 2"
+                    size_hint_y: None
+                    height: 50
+                
+                MDLabel:
+                    theme_text_color: "Custom"
+                    text_color: 1, 1, 1, 1
+                    text: "Toto je obsah 2"
+                    size_hint_y: None
+                    height: 50

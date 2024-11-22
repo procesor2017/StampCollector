@@ -3,7 +3,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
 from .models import Base
+import logging
 
+# Nastavení logování pro SQLAlchemy (vypne všechny logy na úroveň CRITICAL)
+logging.basicConfig()
+logging.disable(logging.INFO)
 # Načítání proměnných z .env
 load_dotenv()
 

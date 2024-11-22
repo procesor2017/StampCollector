@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Float, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
+from sqlalchemy import Text
 
 Base = declarative_base()
 
@@ -35,6 +36,7 @@ class StampBase(Base):
     emission = relationship('Emission', back_populates='stamps')
 
     stamp_types = relationship("StampTypeBase", back_populates="stamp")
+    stamp_details = relationship("StampDetail", back_populates="stamp", uselist=False)  
 class StampTypeBase(Base):
     __tablename__ = 'stamp_type_base'
     
@@ -57,7 +59,7 @@ class StampTypeBase(Base):
 
     # Relace pro hlavní známku
     stamp = relationship("StampBase", back_populates="stamp_types")
-    auction_sales = relationship("AuctionSale", back_populates="stamp_type")
+    auction_sales = relationship("AuctionSale", back_populates="stamp_type")# Jedna známka má maximálně jeden detail
     
     # Přidejte metodu pro převod na slovník
     def as_dict(self):
@@ -79,7 +81,22 @@ class StampTypeBase(Base):
             "catalog_price_poor": self.catalog_price_poor,
             "catalog_price_post_cover": self.catalog_price_post_cover
         }
-    
+
+class StampDetail(Base):
+    __tablename__ = 'stamp_detail'
+
+    detail_id = Column(Integer, primary_key=True)  # Primární klíč
+    stamp_id = Column(Integer, ForeignKey('stamp_base.stamp_id'), nullable=False)  # Vazba na StampBase
+    photo_paths = Column(Text, nullable=False)  # Cesty k fotkám (uloženy jako seznam, například oddělené čárkou)
+    description = Column(Text, nullable=True)  # Textový popis (až 5000 znaků)
+    history = Column(Text, nullable=True)  # Historie známky, zajímavosti nebo další informace
+    rarity = Column(String, nullable=True)  # Stupeň vzácnosti, pokud to dává smysl
+    origin = Column(String, nullable=True)  # Původ známky (např. tiskárna, autor návrhu)
+    production_notes = Column(Text, nullable=True)  # Poznámky k výrobě, jako technika tisku
+
+    # Relace zpět na StampBase
+    stamp = relationship("StampBase", back_populates="stamp_details")    
+
 class AuctionSale(Base):
     __tablename__ = 'auction_sale'
 
@@ -91,3 +108,4 @@ class AuctionSale(Base):
 
     # Vazba zpět na StampTypeBase
     stamp_type = relationship("StampTypeBase", back_populates="auction_sales")
+

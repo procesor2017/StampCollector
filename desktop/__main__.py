@@ -1,3 +1,4 @@
+import logging
 from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivymd.uix.screen import Screen
@@ -13,6 +14,12 @@ from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.animation import Animation
 from kivy.uix.behaviors import ButtonBehavior
+from kivymd.uix.scrollview import MDScrollView
+from kivymd.uix.widget import MDWidget
+from kivy.uix.image import Image
+from kivy.core.window import Window
+from kivy.properties import ObjectProperty
+
 
 class MainApp(MDApp):
     def build(self):
@@ -187,8 +194,40 @@ class ImageWithText(ButtonBehavior, RelativeLayout):
         else:
             print("Right panel not found!")
 
-        
+class ParallaxScroll(MDScrollView):
+    bg_image = ObjectProperty(None)  # Napojení na pozadí z .kv
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self._last_scroll_y = None  # Uložení poslední hodnoty scroll_y
+        self.bind(scroll_y=self.on_scroll_move)
+        self.prev_scroll_y = 0.0
+
+    def on_scroll_move(self, *args):
+        # Kontrola, zda se hodnota scroll_y změnila
+        if self.scroll_y == self._last_scroll_y:
+            return  # Pokud se hodnota nezměnila, metoda se neprovádí
+
+        self._last_scroll_y = self.scroll_y  # Aktualizace poslední hodnoty
+        scroll_y = max(0, min(self.scroll_y, 1))  # Omezte rozsah scroll_y
+        print(f"Scroll Y: {self.scroll_y}, Content Height: {self.children[0].height}, ScrollView Height: {self.height}")
+
+        # Posun pozadí + opacity
+        if self.bg_image:
+            opacity = max(0, 1 - scroll_y)
+            print(f"New Opacity: {self.bg_image.opacity}")
+            self.bg_image.opacity = opacity
+
+            delta_scroll_y = scroll_y - self.prev_scroll_y 
+            self.prev_scroll_y = scroll_y
+
+            # Změníme výpočet speed pro plynulejší pohyb
+            speed = (self.height * delta_scroll_y) * 0.15  # Snížená hodnota pro plynulejší pohyb
+            self.bg_image.y -= speed  # Posuneme obrázek na základě scroll_y
+            print(f"BG Image Y: {self.bg_image.y}")
+
+            # Ujistíme se, že obrázek je stále za obsahem
+            self.bg_image.pos = self.bg_image.pos  # Zajištění správného umístění obrázku
 
 if __name__ == '__main__':
     app = MainApp()
