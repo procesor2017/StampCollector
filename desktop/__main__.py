@@ -74,7 +74,11 @@ class EmissionScreen(Screen):
             expansionPanel = MDExpansionPanel(
                     content=Content(match),
                     panel_cls=MDExpansionPanelOneLine(
-                        text=f"{match.name}",),  # panel class
+                        text=f"{match.name}",
+                        bg_color=(1,1,1,1)
+                        
+                        ),  # panel class
+                    pos_hint= {"center_x": .5, "center_y": .5},
                 )
             results_box.add_widget(expansionPanel)
 """ 
@@ -108,23 +112,32 @@ class Content(MDBoxLayout):
 
         for match in stamps_for_emission:
         # Přidání obrázku známky
-            stamp_image = AsyncImage(
-                source=match.photo_path_base,  # URL obrázku emise
-                size_hint=(1, None),
-                height=200,
-                allow_stretch=True,
-                keep_ratio=True
+            mdbox_layout = MDBoxLayout(
+                    orientation="vertical",
+                    padding=[10, 40, 10, 40],  # Horní, pravé, dolní, levé odsazení
+                    spacing="10dp",
+                    size_hint_y=1,
             )
-            self.add_widget(stamp_image)
+
+            match_photo = f"./data/images/{match.photo_path_base}"
+            stamp_image = AsyncImage(
+                source=match_photo,  # URL obrázku emise
+                size_hint=(None, None),  # Zrušení automatického měřítka
+                size=("100dp", "100dp"),  # Nastavení pevné velikosti
+                allow_stretch=True,
+            )
 
             # Přidání popisku
             label = MDLabel(
-                text=f"Název: {match.name}\nRok: {match.emission}",
-                halign="center",
-                size_hint_y=None,
+                text=f"Název: {match.name}\n",
                 height=50,
+                text_color=(1,1,1,1),
+                pos_hint= {"top": 1, "center_x": .5}
             )
-            self.add_widget(label)
+            mdbox_layout.add_widget(stamp_image)
+            mdbox_layout.add_widget(label)
+
+            self.add_widget(mdbox_layout)
 
 
 
