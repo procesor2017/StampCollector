@@ -1,4 +1,11 @@
 #:kivy 1.2.0
+ScreenManager:
+    id: screen_manager
+    MainLayout:
+    HomeScreen:
+    EmissionScreen:
+
+
 <HoverButton>:
     theme_text_color: "Custom"
     text_color: self.color_text
@@ -43,7 +50,7 @@
 
             MDBoxLayout:
                 size_hint_y: 1
-
+    # Middle 
     MDBoxLayout:
         orientation: "vertical"
         # Top tab
@@ -74,9 +81,30 @@
         
         MDBoxLayout:
             size_hint_y: 0.02
-
+    # space for right side
     MDBoxLayout:
         size_hint_x: 0.02
+    
+    # Right panel for stamps:
+    MDBoxLayout:
+        id: right_panel
+        size_hint_x: 0  # Standardně skrytý
+        md_bg_color: 1, 1, 1, 1
+        orientation: "vertical"
+        padding: [10, 10, 10, 10]
+
+        MDLabel:
+            id: panel_label
+            text: "Informace"
+            halign: "center"
+            valign: "middle"
+            font_size: "18sp"
+
+        MDBoxLayout:
+            orientation: "vertical"
+            MDLabel:
+                text: "Tady budou detaily o známce."
+                halign: "center"
         
 
 <HomeScreen>:
