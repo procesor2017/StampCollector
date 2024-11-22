@@ -9,8 +9,9 @@ from kivymd.uix.menu import MDDropdownMenu
 from kivy.uix.image import AsyncImage
 from kivymd.uix.label import MDLabel
 from kivymd.uix.expansionpanel import MDExpansionPanel, MDExpansionPanelOneLine
+from kivy.uix.relativelayout import RelativeLayout
+from kivy.uix.gridlayout import GridLayout
 
-# Definování barevného schématu
 class MainApp(MDApp):
     def build(self):
         Builder.load_file('views/main.kv')
@@ -101,45 +102,69 @@ from kivymd.uix.label import MDLabel
 from kivy.uix.image import AsyncImage
 
 # Obsah panelu
+from kivy.uix.gridlayout import GridLayout
+
 class Content(MDBoxLayout):
     def __init__(self, emission, **kwargs):
         super().__init__(**kwargs)
-        self.orientation = "horizontal"
+        self.orientation = "vertical"
         self.adaptive_height = True
+        self.md_bg_color= (1,1,1,1)
+
+        # GridLayout pro zalamování obrázků
+        grid_layout = GridLayout(
+            cols=3,  # Počet sloupců (můžeš změnit podle potřeby)
+            row_default_height="150dp",
+            row_force_default=True,
+            spacing="10dp",  # Mezera mezi obrázky
+            size_hint_y=None,
+        )
+
+        # Dynamická výška GridLayout podle obsahu
+        grid_layout.bind(
+            minimum_height=grid_layout.setter("height")
+        )
 
         stamps_for_emission = crud.get_stamps_by_emission(emission.name)
-        # stamps_for_emission[0].
 
         for match in stamps_for_emission:
-        # Přidání obrázku známky
-            mdbox_layout = MDBoxLayout(
-                    orientation="vertical",
-                    padding=[10, 40, 10, 40],  # Horní, pravé, dolní, levé odsazení
-                    spacing="10dp",
-                    size_hint_y=1,
-            )
-
             match_photo = f"./data/images/{match.photo_path_base}"
-            stamp_image = AsyncImage(
-                source=match_photo,  # URL obrázku emise
-                size_hint=(None, None),  # Zrušení automatického měřítka
-                size=("100dp", "100dp"),  # Nastavení pevné velikosti
-                allow_stretch=True,
+            
+            # Obrázek s textem
+            image_with_text = ImageWithText(
+                image_source=match_photo,
+                text=match.name,
             )
+            grid_layout.add_widget(image_with_text)
 
-            # Přidání popisku
-            label = MDLabel(
-                text=f"Název: {match.name}\n",
-                height=50,
-                text_color=(1,1,1,1),
-                pos_hint= {"top": 1, "center_x": .5}
-            )
-            mdbox_layout.add_widget(stamp_image)
-            mdbox_layout.add_widget(label)
-
-            self.add_widget(mdbox_layout)
+        self.add_widget(grid_layout)
 
 
+class ImageWithText(RelativeLayout):
+    def __init__(self, image_source, text, **kwargs):
+        super().__init__(**kwargs)
+        self.size_hint = (None, None)
+        self.size = ("150dp", "150dp") 
+
+        # Obrázek
+        self.image = AsyncImage(
+            source=image_source,
+            size_hint=(1, 1),
+            allow_stretch=True,
+        )
+        self.add_widget(self.image)
+
+        # Text
+        self.label = MDLabel(
+            text=text,
+            halign="center",
+            valign="middle",
+            size_hint=(1, 1),
+            theme_text_color="Custom",
+            text_color=(1, 1, 1, 1),
+            bold=True,
+        )
+        self.add_widget(self.label)
 
 
 
