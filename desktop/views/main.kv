@@ -242,13 +242,14 @@
                 orientation: 'vertical'
                 size_hint_y: None
                 height: self.minimum_height  # Automatická výška podle obsahu
-
+                spacing: 15
+                # Top horníébox s imagem a informacemi
                 MDBoxLayout:
                     orientation: 'horizontal'
                     size_hint_y: None
                     height: self.minimum_height
                     spacing: 10
-
+                    # Image
                     MDCard:
                         orientation: "vertical"
                         border_radius: 20
@@ -279,16 +280,103 @@
                         elevation: 2
                         line_width: 1
                         line_color: (1, 1, 1, 0.15)
+                        padding: 6
                         MDLabel:
                             id: stamp_detail_stamp_name
                             theme_text_color: "Custom"
                             text_color: 1, 1, 1, 1
                             text: "Stamps name"
-                            size_hint: None, None
+                            size_hint: 1, 0.2
+                            font_size: "42sp" 
 
                         MDLabel:
-                            id: stamp_detail_stamp_emission
+                            id: stamp_detail_stamp_catalogue_number
                             theme_text_color: "Custom"
                             text_color: 1, 1, 1, 1
-                            text: "StampEmission"
-                            size_hint: None, None
+                            text: "Cat. number"
+                            size_hint: 1, 0.25
+                            font_size: "32sp" 
+
+                        MDLabel:
+                            id: stamp_detail_stamp_nation_and_year
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+                            text: "Země / Rok"
+                            size_hint: 1, 0.25
+                            font_size: "14sp" 
+
+                        MDLabel:
+                            id: stamp_detail_stamp_emision
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+                            text: "Emise"
+                            size_hint: 1, 0.25
+                            font_size: "14sp" 
+
+                        MDLabel:
+                            id: stamp_detail_stamp_type
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+                            text: "Počet podtypu: "
+                            size_hint: 1, 0.25
+                            font_size: "14sp"
+                    
+                    #Sale information
+                    MDCard:
+                        size_hint: .30, 1
+                        height: self.minimum_height  # Automatická výška podle obsahu
+                        orientation: "vertical"
+                        border_radius: 20
+                        radius: [15]
+                        md_bg_color: 1,1,1,0.08
+                        elevation: 2
+                        line_width: 1
+                        line_color: (1, 1, 1, 0.15)
+                        padding: 10
+                        MDLabel:
+                            id: stamp_detail_avg_auction_price_number
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+                            text: "Avg. auction price"
+                            size_hint: 1, 0.35
+                            font_size: "26sp"
+                            halign: "center"
+                        
+                        MDLabel:
+                            id: stamp_detail_avg_auction_price_information_label
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+                            text: "Avg. acution price"
+                            size_hint: 1, 0.1
+                            font_size: "16sp"
+                            halign: "center"
+
+                        MDLabel:
+                            id: stamp_detail_catalogue_price_number
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+                            text: "Cat. price"
+                            size_hint: 1, 0.35
+                            font_size: "26sp" 
+                            halign: "center"
+
+                        MDLabel:
+                            id: stamp_detail_catalogue_price_information_label
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+                            text: "Cat. price"
+                            size_hint: 1, 0.1
+                            font_size: "16sp" 
+                            halign: "center"
+                MDCard:
+                    size_hint: 1, 1
+                    height: self.minimum_height  # Automatická výška podle obsahu
+                    orientation: "vertical"
+                    border_radius: 20
+                    radius: [15]
+                    md_bg_color: 1,1,1,0.08
+                    elevation: 2
+                    line_width: 1
+                    line_color: (1, 1, 1, 0.15)
+                    padding: 10
+

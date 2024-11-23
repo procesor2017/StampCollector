@@ -14,12 +14,7 @@ from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.animation import Animation
 from kivy.uix.behaviors import ButtonBehavior
-from kivymd.uix.scrollview import MDScrollView
-from kivymd.uix.widget import MDWidget
-from kivy.uix.image import Image
-from kivy.core.window import Window
-from kivy.properties import ObjectProperty
-
+from kivymd.uix.fitimage import FitImage
 
 class MainApp(MDApp):
     def build(self):
