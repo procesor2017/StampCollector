@@ -249,6 +249,7 @@
                     size_hint_y: None
                     height: self.minimum_height
                     spacing: 10
+                    padding: 8
                     # Image
                     MDCard:
                         orientation: "vertical"
@@ -369,9 +370,10 @@
                             font_size: "16sp" 
                             halign: "center"
                 MDCard:
-                    size_hint: 1, 1
-                    height: self.minimum_height  # Automatická výška podle obsahu
+                    id: stamp_detail_articles_for_one_stamp
+                    size_hint: 1, None  
                     orientation: "vertical"
+                    height: dp(100)
                     border_radius: 20
                     radius: [15]
                     md_bg_color: 1,1,1,0.08
@@ -379,4 +381,11 @@
                     line_width: 1
                     line_color: (1, 1, 1, 0.15)
                     padding: 10
-
+                    MDScrollView:
+                        MDBoxLayout:
+                            id: stamp_detail_articles_for_one_stamp
+                            size_hint_y: None  # Povolit dynamickou výšku
+                            orientation: "vertical"
+                            height: self.minimum_height  # Automaticky se přizpůsobí obsahu
+                            spacing: dp(10)
+                            padding: dp(10)

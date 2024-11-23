@@ -91,6 +91,50 @@ class StampScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+    def on_enter(self):
+            # Simulovaná data z databáze
+            articles = [
+                {
+                    "title": "Článek o známce 1",
+                    "image": "obrazek1.jpg",
+                    "description": "Toto je podrobný popis k prvnímu článku."
+                },
+                {
+                    "title": "Článek o známce 2",
+                    "image": "obrazek2.jpg",
+                    "description": "Toto je podrobný popis k druhému článku."
+                },   
+            ]
+            self.ids.stamp_detail_articles_for_one_stamp.clear_widgets()
+            
+            for article in articles:
+                panel = MDExpansionPanel(
+                    icon=article["image"],
+                    content=ArticleContent(
+                        image=article["image"],
+                        description=article["description"]
+                    ),
+                    panel_cls=MDExpansionPanelOneLine(
+                        text=article["title"]
+                    ),
+                )
+                self.ids.stamp_detail_articles_for_one_stamp.add_widget(panel)
+
+class ArticleContent(MDBoxLayout):
+    def __init__(self, image, description, **kwargs):
+        super().__init__(**kwargs)
+        self.orientation = "horizontal"
+        self.spacing = "8dp"
+        self.padding = "8dp"
+
+        # Obrázek vlevo
+        self.add_widget(FitImage(source=image, size_hint=(0.5, 1)))
+
+        # Popis vpravo
+        text_box = MDBoxLayout(orientation="vertical", spacing="4dp")
+        text_box.add_widget(MDLabel(text=description, theme_text_color="Secondary", halign="left"))
+        self.add_widget(text_box)
+
 class HoverButton(MDRoundFlatIconButton, HoverBehavior):
     color_text = 1,1,1,1
     def on_enter(self):
