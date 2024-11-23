@@ -92,33 +92,48 @@ class StampScreen(Screen):
         super().__init__(**kwargs)
 
     def on_enter(self):
-            # Simulovaná data z databáze
-            articles = [
-                {
-                    "title": "Článek o známce 1",
-                    "image": "obrazek1.jpg",
-                    "description": "Toto je podrobný popis k prvnímu článku."
-                },
-                {
-                    "title": "Článek o známce 2",
-                    "image": "obrazek2.jpg",
-                    "description": "Toto je podrobný popis k druhému článku."
-                },   
-            ]
-            self.ids.stamp_detail_articles_for_one_stamp.clear_widgets()
-            
-            for article in articles:
-                panel = MDExpansionPanel(
-                    icon=article["image"],
-                    content=ArticleContent(
-                        image=article["image"],
-                        description=article["description"]
-                    ),
-                    panel_cls=MDExpansionPanelOneLine(
-                        text=article["title"]
-                    ),
-                )
-                self.ids.stamp_detail_articles_for_one_stamp.add_widget(panel)
+        # Simulovaná data z databáze
+        articles = [
+            {
+                "title": "Článek o známce 1",
+                "image": "obrazek1.jpg",
+                "description": "Toto je podrobný popis k prvnímu článku."
+            },
+            {
+                "title": "Článek o známce 2",
+                "image": "obrazek2.jpg",
+                "description": "Toto je podrobný popis k druhému článku."
+            },
+        ]
+
+        # Vymaže aktuální widgety
+        articles_container = self.ids.articles_container
+        articles_container.clear_widgets()
+
+        # Přidává články do kontejneru
+        for article in articles:
+            panel = MDExpansionPanel(
+                icon=article["image"],
+                content=ArticleContent(
+                    image=article["image"],
+                    description=article["description"]
+                ),
+                panel_cls=MDExpansionPanelOneLine(
+                    text=article["title"]
+                ),
+                on_open=self.update_card_height,
+                on_close=self.update_card_height,
+            )
+            articles_container.add_widget(panel)
+
+        # Aktualizace výšky po přidání
+        # self.update_card_height()
+
+    def update_card_height(self, *args):
+        """Aktualizuje výšku karty na základě obsahu."""
+        articles_container = self.ids.articles_container
+        self.ids.stamp_detail_articles_for_one_stamp.height = articles_container.height
+
 
 class ArticleContent(MDBoxLayout):
     def __init__(self, image, description, **kwargs):
