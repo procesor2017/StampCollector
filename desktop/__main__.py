@@ -194,20 +194,6 @@ class ImageWithText(ButtonBehavior, RelativeLayout):
         else:
             print("Right panel not found!")
 
-class ParallaxScroll(MDScrollView):
-    bg_image = ObjectProperty(None)  # Napojení na pozadí z .kv
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self._last_scroll_y = 0
-        self.bind(scroll_y=self.on_scroll_move)
-        self.prev_scroll_y = 0.0
-
-    def on_scroll_move(self, *args):
-        if self.bg_image:
-            # Hladký výpočet opacity
-            opacity = self.scroll_y
-            self.bg_image.opacity = opacity
 
             
 

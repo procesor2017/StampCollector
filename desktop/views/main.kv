@@ -9,7 +9,6 @@
     md_bg_color: 0,0,0,0
 
 <ClickableBox>:
-<ParallaxScroll>:
 
 
 <MainLayout>:
@@ -43,6 +42,10 @@
                 size_hint_x: 1
                 on_release: app.root.ids.screen_manager.current = "Emission"
 
+            HoverButton:
+                text: "StampScreen"
+                size_hint_x: 1
+                on_release: app.root.ids.screen_manager.current = "Stamp"
 
             MDBoxLayout:
                 size_hint_y: 1
@@ -222,78 +225,70 @@
                 adaptive_height: True         
 
 <StampScreen>:
-    ParallaxScroll:
-        bg_image: bg  # Napojení ID na atribut bg_image
-        size_hint: 1, 1  # Zajistí plnou velikost widgetu
-        pos: 0,0
-        # Hlavní BoxLayout
-        MDBoxLayout:
-            orientation: 'vertical'
-            size_hint_y: None
-            height: self.minimum_height  # Automatická výška podle obsahu
-
-            # Pozadí obrázku
-            Image:
-                id: bg  # Nastavení ID pro napojení na Python
-                pos: self.pos
-                source: "./data/images/austria/1850-1918/1Kr1850.png"
-                allow_stretch: True
-                keep_ratio: False
-                size_hint_y: None
-                height: dp(300)  # Nastavení pevné výšky obrázku
-                opacity: 1  # Na začátku je pozadí plně neprůhledné
-                canvas.before:
-        # Zajistí, že obrázek bude vykreslen pod ostatním obsahem
-                    Rectangle:
-                        size: self.size
-                        pos: self.pos
-                        source: self.source
-
+    MDCard:
+        size_hint: 1,1
+        border_radius: 20
+        radius: [15]
+        md_bg_color: 1,1,1,0.08
+        elevation: 4
+        line_width: 1
+        line_color: (1, 1, 1, 0.15)
+        padding: 10
+        MDScrollView:
+            size_hint: 1, 1  # Zajistí plnou velikost widgetu
+            pos: 0,0
+            # Hlavní BoxLayout
             MDBoxLayout:
                 orientation: 'vertical'
                 size_hint_y: None
                 height: self.minimum_height  # Automatická výška podle obsahu
-                spacing: dp(50)
-                
-                # Obsah
-                MDLabel:
-                    theme_text_color: "Custom"
-                    text_color: 1, 1, 1, 1
-                    text: "Toto je obsah 1"
-                    size_hint_y: None
-                    height: 50
 
-                MDLabel:
-                    theme_text_color: "Custom"
-                    text_color: 1, 1, 1, 1
-                    text: "Toto je obsah 2"
+                MDBoxLayout:
+                    orientation: 'horizontal'
                     size_hint_y: None
-                    height: 50
-                
-                MDLabel:
-                    theme_text_color: "Custom"
-                    text_color: 1, 1, 1, 1
-                    text: "Toto je obsah 2"
-                    size_hint_y: None
-                    height: 50
-                # Obsah
-                MDLabel:
-                    theme_text_color: "Custom"
-                    text_color: 1, 1, 1, 1
-                    text: "Toto je obsah 1"
-                    size_hint_y: None
-                    height: 50
+                    height: self.minimum_height
+                    spacing: 10
 
-                MDLabel:
-                    theme_text_color: "Custom"
-                    text_color: 1, 1, 1, 1
-                    text: "Toto je obsah 2"
-                    size_hint_y: None
-                    height: 50
-                
-                MDLabel:
-                    theme_text_color: "Custom"
-                    text_color: 1, 1, 1, 1
-                    text: "Toto je obsah 2"
-                    size_hint_y: None
-                    height: 50
+                    MDCard:
+                        orientation: "vertical"
+                        border_radius: 20
+                        radius: [15]
+                        md_bg_color: 1,1,1,0.08
+                        elevation: 2
+                        line_width: 1
+                        line_color: (1, 1, 1, 0.15)
+                        size: dp(300), dp(400)
+                        size_hint: None, None
+                        size: root.width * 0.3, root.height * 0.4
+                        FitImage:
+                            id: stamp_detail_md3card_tamp_image
+                            radius: [15, 15, 15, 15]
+                            allow_stretch: False
+                            keep_ratio: True
+                            source: "./data/images/austria/1850-1918/1Kr1850.png"
+                            size_hint: 1, 1  
+
+                    # Boxs in right side
+                    MDCard:
+                        size_hint: .45, 1
+                        height: self.minimum_height  # Automatická výška podle obsahu
+                        orientation: "vertical"
+                        border_radius: 20
+                        radius: [15]
+                        md_bg_color: 1,1,1,0.08
+                        elevation: 2
+                        line_width: 1
+                        line_color: (1, 1, 1, 0.15)
+                        MDLabel:
+                            id: stamp_detail_stamp_name
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+                            text: "Stamps name"
+                            size_hint: None, None
+
+                        MDLabel:
+                            id: stamp_detail_stamp_emission
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+                            text: "StampEmission"
+                            size_hint: None, None
