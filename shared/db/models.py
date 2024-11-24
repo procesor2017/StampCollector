@@ -105,6 +105,7 @@ class AuctionSale(Base):
     sale_price = Column(Float, nullable=False)  # Cena za prodej
     sale_url = Column(String, nullable=False)  # URL na aukční prodej
     description = Column(String, nullable=True)  # Popis aukce (např. stav, rarita, poznámky)
+    state_of_stamp = Column(Text, nullable=True) # **, *, (*)
 
     # Vazba zpět na StampTypeBase
     stamp_type = relationship("StampTypeBase", back_populates="auction_sales")

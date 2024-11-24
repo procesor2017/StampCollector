@@ -15,11 +15,20 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.animation import Animation
 from kivy.uix.behaviors import ButtonBehavior
 from kivymd.uix.fitimage import FitImage
+from kivymd.uix.datatables.datatables import MDDataTable
+from kivy.metrics import dp
 
 class MainApp(MDApp):
     def build(self):
         Builder.load_file('views/main.kv')
         return MainLayout()
+    
+    def open_detail_screen(self, item_id):
+        """Otevře detailní obrazovku s konkrétním stamp ID."""
+        screen_manager = self.root.ids.screen_manager
+        detail_screen = screen_manager.get_screen("Stamp")
+        detail_screen.update_content(item_id)
+        screen_manager.current = "Stamp"
 
 class MainLayout(MDBoxLayout, Screen):
     def show_righ_panel(self):
@@ -91,7 +100,31 @@ class StampScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+    def update_content(self, item_id):
+        """Aktualizuje obsah obrazovky na základě ID položky."""
+        self.stamp_id_from_search = item_id
+
     def on_enter(self):
+        # Update Top first box with image a informnation
+        stamp_id = self.stamp_id_from_search
+        stamp_photo_top_card = self.ids.stamp_detail_md3card_tamp_image
+        stamp_detail_stamp_name = self.ids.stamp_detail_stamp_name
+        stamp_detail_stamp_catalogue_number = self.ids.stamp_detail_stamp_catalogue_number
+        stamp_destamp_detail_stamp_nation_and_year = self.ids.stamp_detail_stamp_nation_and_year
+        stamp_detail_stamp_emision = self.ids.stamp_detail_stamp_emision
+        stamp_detail_stamp_type = self.ids.stamp_detail_stamp_type
+
+        match = crud.get_stamp_by_id(stamp_id=stamp_id)
+
+
+        stamp_photo_top_card.source = f"./data/images/{match.photo_path_base}"
+        stamp_detail_stamp_name.text = f"{match.name}"
+        stamp_detail_stamp_catalogue_number.text = f"Cat. N.: {match.catalog_number}"
+        stamp_destamp_detail_stamp_nation_and_year.text = f"{match.emission.country.name} / {match.emission.issue_year}"
+        stamp_detail_stamp_emision.text = f"{match.emission.name}"
+        stamp_detail_stamp_type.text = f"{crud.get_n_of_stamp_type_base(stamp_id=stamp_id)}"
+
+        # Create article:
         # Simulovaná data z databáze
         articles = [
             {
@@ -126,13 +159,38 @@ class StampScreen(Screen):
             )
             articles_container.add_widget(panel)
 
-        # Aktualizace výšky po přidání
-        # self.update_card_height()
+        self.get_last_selling_for_stamp()
+
 
     def update_card_height(self, *args):
         """Aktualizuje výšku karty na základě obsahu."""
         articles_container = self.ids.articles_container
         self.ids.stamp_detail_articles_for_one_stamp.height = articles_container.height
+
+    def get_last_selling_for_stamp(self, *args):
+        """Set last selling information to card"""
+        stamp_id = self.stamp_id_from_search
+        selling_card = self.ids.stamp_detail_last_10_selling_information
+        
+        data_to_selling_table = crud.get_auctions_by_stamp_base(stamp_id)
+
+        self.selling_table = MDDataTable(
+            column_data=[
+                ("Type", dp(60)),
+                ("Quality", dp(30)),
+                ("Price", dp(30))
+            ],
+            row_data = [],
+            sorted_on="Schedule",
+            sorted_order="ASC",
+            elevation=2,
+        )
+
+        for data in data_to_selling_table:
+            row_data = (data.stamp_type_id, data.state_of_stamp, data.sale_price)
+            self.selling_table.add_row(row_data)
+
+        selling_card.add_widget(self.selling_table)
 
 
 class ArticleContent(MDBoxLayout):
@@ -194,7 +252,6 @@ class Content(MDBoxLayout):
             )
             grid_layout.add_widget(image_with_text)
         self.add_widget(grid_layout)
-
 
 class ImageWithText(ButtonBehavior, RelativeLayout):
     def __init__(self, image_source, text, **kwargs):

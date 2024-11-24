@@ -64,6 +64,12 @@ def get_stamp_type_by_id(stamp_id):
 def get_all_stamp_type_by_id(stamp_id):
     return session.query(StampTypeBase).filter(StampTypeBase.stamp_id == stamp_id).all()
 
+def get_n_of_stamp_type_base(stamp_id):
+    stamp_types = session.query(StampTypeBase).filter(
+        StampTypeBase.stamp_id == stamp_id
+    ).all()
+    return len(stamp_types)
+
 # Country
 def insert_country(name):
     new_country = Country(name=name)
@@ -126,3 +132,9 @@ def add_auction(stamp_type_id: int, price: float, url: str, description: str):
 # Získání všech aukcí pro daný typ známky
 def get_auctions_by_stamp_type(stamp_type_id: int):
     return session.query(AuctionSale).filter(AuctionSale.stamp_type_id == stamp_type_id).all()
+
+def get_auctions_by_stamp_base(stamp_id: int):
+    stamp_result = session.query(StampTypeBase).filter(StampTypeBase.stamp_id == stamp_id).first()
+    if stamp_result:
+        return session.query(AuctionSale).filter(AuctionSale.stamp_type_id == stamp_result.stamp_type_id).all()
+    return []

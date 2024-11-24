@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, Request, Depends
+from contextlib import asynccontextmanager
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
@@ -6,12 +7,20 @@ from shared.db import crud
 from pydantic import BaseModel
 from typing import List, Optional
 from fastapi.responses import RedirectResponse
+from shared.db.database import initialize_db
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Initialize the database when the app starts
+    await initialize_db()
+    yield
+
+app = FastAPI(lifespan=lifespan)
 
 templates = Jinja2Templates(directory="backend/templates")
 app.mount("/static", StaticFiles(directory="backend/static"), name="static")
 app.mount("/images", StaticFiles(directory="data/images"), name="images")
+
 
 # Pydantic model pro emisii
 class EmissionCreate(BaseModel):
