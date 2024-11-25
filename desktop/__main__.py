@@ -17,6 +17,7 @@ from kivy.uix.behaviors import ButtonBehavior
 from kivymd.uix.fitimage import FitImage
 from kivymd.uix.datatables.datatables import MDDataTable
 from kivy.metrics import dp
+from kivy.core.window import Window
 
 class MainApp(MDApp):
     def build(self):
@@ -171,15 +172,25 @@ class StampScreen(Screen):
         """Set last selling information to card"""
         stamp_id = self.stamp_id_from_search
         selling_card = self.ids.stamp_detail_last_10_selling_information
+
+        selling_card.clear_widgets()
         
         data_to_selling_table = crud.get_auctions_by_stamp_base(stamp_id)
 
+        table_width = selling_card.width
+        type_width = table_width * 0.08
+        quality_width= table_width * 0.04
+        price_width= table_width * 0.04
+
+        column_widths = [
+            ("Type", type_width),  # 30 % šířky okna
+            ("Quality", quality_width),  # 20 % šířky okna
+            ("Price", price_width),  # 20 % šířky okna
+        ]
+    
         self.selling_table = MDDataTable(
-            column_data=[
-                ("Type", dp(60)),
-                ("Quality", dp(30)),
-                ("Price", dp(30))
-            ],
+            size_hint=(1, 1),
+            column_data=column_widths,
             row_data = [],
             sorted_on="Schedule",
             sorted_order="ASC",
@@ -249,16 +260,17 @@ class Content(MDBoxLayout):
             image_with_text = ImageWithText(
                 image_source=match_photo,
                 text=match.name,
+                stamp_id=match.stamp_id
             )
             grid_layout.add_widget(image_with_text)
         self.add_widget(grid_layout)
 
 class ImageWithText(ButtonBehavior, RelativeLayout):
-    def __init__(self, image_source, text, **kwargs):
+    def __init__(self, image_source, text, stamp_id, **kwargs):
         super().__init__(**kwargs)
         self.size_hint = (None, None)
         self.size = ("150dp", "150dp")
-
+        self.stamp_id = stamp_id
         # Obrázek
         self.image = AsyncImage(
             source=image_source,
@@ -289,6 +301,9 @@ class ImageWithText(ButtonBehavior, RelativeLayout):
         # Získat aktuální text v panelu
         current_text = stamp_name.text
         new_text = self.label.text
+
+        # Defination ID for *.kv file
+        right_panel.stamp_id = self.stamp_id
 
         if right_panel:
             if right_panel.size_hint_x == 0:  # Pokud je panel skrytý, zobrazí ho

@@ -11,6 +11,7 @@
 <ClickableBox>:
 
 
+
 <MainLayout>:
     orientation: "horizontal"
     md_bg_color: 0,0,0,1
@@ -94,7 +95,7 @@
         size_hint_x: 0  # Standardně skrytý nastavení je pak pod on release na .45
         size_hint_y: 0.92
         padding: 10
-        on_release: app.root.ids.screen_manager.current = "Stamp"
+        on_release: app.open_detail_screen(right_panel.stamp_id)
 
         MDBoxLayout:
             md_bg_color: 1, 1, 1, 1
@@ -399,7 +400,7 @@
                     padding: 0
                     MDCard:
                         id: stamp_detail_selling_graph
-                        size_hint: .7, 1
+                        size_hint: .55, 1
                         height: self.minimum_height  # Automatická výška podle obsahu
                         orientation: "vertical"
                         border_radius: 20
@@ -419,7 +420,7 @@
                             halign: "center"
                     MDCard:
                         id: stamp_detail_last_10_selling_information
-                        size_hint: .3, 1
+                        size_hint: .45, 1
                         height: self.minimum_height  # Automatická výška podle obsahu
                         orientation: "vertical"
                         border_radius: 20
