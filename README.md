@@ -6,7 +6,7 @@ It's not a business project or a plan I'm just combining two hobbies together.
 # Basic
 Homemade project for creating web app for collecting data about stamps
 
-# Web APp
+# Web APP
 ## How to run
 ``` python -m uvicorn backend.app.main:app --reload ```
 
