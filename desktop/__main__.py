@@ -161,7 +161,7 @@ class StampScreen(Screen):
             articles_container.add_widget(panel)
 
         self.get_last_selling_for_stamp()
-
+        self.get_subtype_stamps_to_datatable(stamp_id=stamp_id)
 
     def update_card_height(self, *args):
         """Aktualizuje výšku karty na základě obsahu."""
@@ -202,6 +202,51 @@ class StampScreen(Screen):
             self.selling_table.add_row(row_data)
 
         selling_card.add_widget(self.selling_table)
+
+    def get_subtype_stamps_to_datatable(self, stamp_id, *args):
+        stamp_subtype_table = self.ids.stamp_detail_subtype_mdcard_for_table
+        # Subtype to table
+        subtype_table_data = crud.get_all_stamp_type_by_id(stamp_id)
+
+        column_widths = [
+            ("Photo", dp(60)),
+            ("Stamp Type Name", dp(20)),
+            ("Description", dp(60)), 
+            ("color", dp(35)),
+            ("paper", dp(35)),
+            ("perforation", dp(20)),
+            ("plate_flaw", dp(60)),
+            ("**", dp(10)),
+            ("*", dp(10)),
+            ("(*)", dp(10)),    
+            ("Post cover price", dp(25)),         
+        ]
+
+
+        self.subtype_table = MDDataTable(
+            size_hint=(1, 1),
+            column_data=column_widths,
+            row_data = [],
+            sorted_on="Schedule",
+            sorted_order="ASC",
+            elevation=2,
+        )
+
+        for subtype in subtype_table_data:
+            row_data = (subtype.photo_path_type,
+                        subtype.type_name,
+                        subtype.description,
+                        subtype.color,
+                        subtype.paper,
+                        subtype.perforation,
+                        subtype.plate_flaw,
+                        subtype.catalog_price_extra_fine,
+                        subtype.catalog_price_fine,
+                        subtype.catalog_price_avg,
+                        subtype.catalog_price_post_cover)
+            self.subtype_table.add_row(row_data)
+        
+        stamp_subtype_table.add_widget(self.subtype_table)
 
 
 class ArticleContent(MDBoxLayout):
