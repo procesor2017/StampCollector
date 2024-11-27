@@ -1,9 +1,10 @@
+import os
 import logging
 from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivymd.uix.screen import Screen
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.button import MDRoundFlatIconButton
+from kivymd.uix.button import MDRoundFlatIconButton, MDRaisedButton, MDFlatButton
 from kivymd.uix.behaviors import HoverBehavior
 from shared.db import crud
 from kivymd.uix.menu import MDDropdownMenu
@@ -18,6 +19,7 @@ from kivymd.uix.fitimage import FitImage
 from kivymd.uix.datatables.datatables import MDDataTable
 from kivy.metrics import dp
 from kivy.core.window import Window
+from kivy.uix.image import Image
 
 class MainApp(MDApp):
     def build(self):
@@ -203,50 +205,53 @@ class StampScreen(Screen):
 
         selling_card.add_widget(self.selling_table)
 
-    def get_subtype_stamps_to_datatable(self, stamp_id, *args):
+    def get_subtype_stamps_to_datatable(self, stamp_id):
+        """
+        Zobrazí detailní tabulku podtypů známek s podporou stránkování.
+        """
+        # Načtení rodičovského widgetu, kde bude tabulka zobrazena
         stamp_subtype_table = self.ids.stamp_detail_subtype_mdcard_for_table
-        # Subtype to table
+
+        # Načtení dat z databáze
         subtype_table_data = crud.get_all_stamp_type_by_id(stamp_id)
 
-        column_widths = [
-            ("Photo", dp(60)),
-            ("Stamp Type Name", dp(20)),
-            ("Description", dp(60)), 
-            ("color", dp(35)),
-            ("paper", dp(35)),
-            ("perforation", dp(20)),
-            ("plate_flaw", dp(60)),
-            ("**", dp(10)),
-            ("*", dp(10)),
-            ("(*)", dp(10)),    
-            ("Post cover price", dp(25)),         
+        # Transformace dat pro použití v tabulce
+        stamp_data = [
+            {
+                "photo_path_type": subtype.photo_path_type,
+                "type_name": subtype.type_name,
+                "description": subtype.description,
+                "color": subtype.color,
+                "paper": subtype.paper,
+                "perforation": subtype.perforation,
+                "plate_flaw": subtype.plate_flaw,
+                "catalog_price_extra_fine": subtype.catalog_price_extra_fine,
+                "catalog_price_fine": subtype.catalog_price_fine,
+                "catalog_price_avg": subtype.catalog_price_avg,
+                "catalog_price_post_cover": subtype.catalog_price_post_cover,
+            }
+            for subtype in subtype_table_data
         ]
 
+        # Vyčištění starého obsahu
+        stamp_subtype_table.clear_widgets()
 
-        self.subtype_table = MDDataTable(
-            size_hint=(1, 1),
-            column_data=column_widths,
-            row_data = [],
-            sorted_on="Schedule",
-            sorted_order="ASC",
-            elevation=2,
+        # Vytvoření paginatoru a jeho připojení do rozhraní
+        StampTablePaginator(
+            parent_widget=stamp_subtype_table,
+            data=stamp_data,
+            rows_per_page=10  # Počet řádků na stránku
         )
 
-        for subtype in subtype_table_data:
-            row_data = (subtype.photo_path_type,
-                        subtype.type_name,
-                        subtype.description,
-                        subtype.color,
-                        subtype.paper,
-                        subtype.perforation,
-                        subtype.plate_flaw,
-                        subtype.catalog_price_extra_fine,
-                        subtype.catalog_price_fine,
-                        subtype.catalog_price_avg,
-                        subtype.catalog_price_post_cover)
-            self.subtype_table.add_row(row_data)
-        
-        stamp_subtype_table.add_widget(self.subtype_table)
+    def get_image_widget(self, image_path):
+        """
+        Vrací widget obrázku nebo textovou náhradu, pokud obrázek neexistuje.
+        """
+        if os.path.exists(image_path):
+            return Image(source=image_path, size_hint=(None, None), size=(dp(100), dp(100)))
+        else:
+            return MDLabel(text="No Image", size_hint_y=None, height=dp(40))
+
 
 
 class ArticleContent(MDBoxLayout):
@@ -365,6 +370,132 @@ class ImageWithText(ButtonBehavior, RelativeLayout):
         else:
             print("Right panel not found!")
 
+class StampTablePaginator:
+    def __init__(self, parent_widget, data, rows_per_page=10):
+        self.parent_widget = parent_widget
+        self.data = data
+        self.rows_per_page = rows_per_page
+        self.current_page = 0
+
+        self.table_layout = GridLayout(
+            cols=11,
+            size_hint=(1, None),
+            spacing=dp(10),
+        )
+
+        self.table_layout.bind(minimum_height=self.table_layout.setter("height"))
+
+        # Vytvoření navigačních tlačítek
+        self.navigation_layout = MDBoxLayout(
+            orientation="horizontal",
+            size_hint=(1, None),
+            height=dp(50),
+            spacing=dp(10)
+        )
+
+        self.parent_widget.height = self.table_layout.height + self.navigation_layout.height
+
+        self.prev_button = MDRaisedButton(
+            text="Předchozí",
+            on_release=lambda x: self.prev_page(x),
+            disabled=True
+        )
+        self.next_button = MDRaisedButton(
+            text="Další",
+            on_release=lambda x: self.next_page(x)
+        )
+
+        self.next_button.bind(on_press=self.next_page)
+
+        self.navigation_layout.add_widget(self.prev_button)
+        self.navigation_layout.add_widget(self.next_button)
+
+        # Přidání tabulky a navigace do rodičovského widgetu
+        self.parent_widget.clear_widgets()
+        self.parent_widget.add_widget(self.table_layout)
+        self.parent_widget.add_widget(self.navigation_layout)
+
+        # Vykreslení první stránky
+        self.show_page(0)
+
+    def show_page(self, page_number):
+        """
+        Zobrazí data pro zadanou stránku.
+        """
+        self.current_page = page_number
+        self.table_layout.clear_widgets()
+
+        # Záhlaví tabulky
+        headers = [
+            "Photo", "Type Sign", "Description", "Color", "Paper",
+            "Perforation", "Plate Flaw", "**", "*", "(*)", "Post Cover Price"
+        ]
+        for header in headers:
+            self.table_layout.add_widget(MDLabel(text=header, size_hint_y=None, height=dp(40), bold=True))
+
+        # Výpočet dat pro stránku
+        start_index = page_number * self.rows_per_page
+        end_index = start_index + self.rows_per_page
+        page_data = self.data[start_index:end_index]
+
+        # Přidání datových řádků
+        for subtype in page_data:
+            # Přidání obrázku
+            self.table_layout.add_widget(self.get_image_widget(subtype['photo_path_type']))
+
+            # Vytvoření a přizpůsobení MDLabel widgetů
+            type_label = MDLabel(
+                text=subtype['type_name'],
+                size_hint_y=None,
+                height=dp(150)
+            )
+            type_label.halign = "center"
+            type_label.valign = "center"
+            type_label.text_size = (None, None)  # Ujisti se, že textové zarovnání funguje
+            self.table_layout.add_widget(type_label)
+
+            
+            for key in ['description', 'color', 'paper', 'perforation', 'plate_flaw',
+                        'catalog_price_extra_fine', 'catalog_price_fine', 
+                        'catalog_price_avg', 'catalog_price_post_cover']:
+                label = MDLabel(
+                    text=str(subtype[key]),  # Konverze na text
+                    size_hint_y=None,
+                    height=dp(150)
+                )
+                label.halign = "center"
+                label.valign = "center"
+                label.text_size = (None, None)
+                self.table_layout.add_widget(label)
+
+        # Dynamická výška rodiče
+        self.parent_widget.height = (
+            self.table_layout.height + self.navigation_layout.height
+        )
+
+        # Aktualizace stavu tlačítek
+        self.prev_button.disabled = (page_number == 0)
+        self.next_button.disabled = (end_index >= len(self.data))
+
+    def prev_page(self, instance):
+            if self.current_page > 0:
+                self.show_page(self.current_page - 1)
+
+    def next_page(self, instance):
+        print("mačkám tlačítko")
+        if (self.current_page + 1) * self.rows_per_page < len(self.data):
+            self.show_page(self.current_page + 1)
+
+    def get_image_widget(self, image_path):
+        """
+        Vrací widget obrázku nebo textovou náhradu, pokud obrázek neexistuje.
+        """
+        
+        real_photo_path = f"data/images/{image_path}"
+        if os.path.exists(real_photo_path):
+            return Image(source=real_photo_path, size_hint=(None, None), size=(dp(150), dp(150)))
+        else:
+            return MDLabel(text="No need for a picture", size_hint_y=None, height=dp(40))
 
             
 

@@ -393,24 +393,18 @@
                             padding: dp(10)
 
                 # Subtypes
-                MDBoxLayout:
-                    orientation: 'horizontal'
-                    size_hint_y: None
-                    height: 500
-                    spacing: 10
-                    padding: 0
-                    MDCard:
-                        id: stamp_detail_subtype_mdcard_for_table
-                        size_hint: 1, 1
-                        height: self.minimum_height  # Automatická výška podle obsahu
-                        orientation: "vertical"
-                        border_radius: 20
-                        radius: [15]
-                        md_bg_color: 1,1,1,0.08
-                        elevation: 2
-                        line_width: 1
-                        line_color: (1, 1, 1, 0.15)
-                        padding: 10
+                MDCard:
+                    id: stamp_detail_subtype_mdcard_for_table
+                    size_hint: 1, None
+                    height: self.minimum_height  # Automatická výška podle obsahu
+                    orientation: "vertical"
+                    border_radius: 20
+                    radius: [15]
+                    md_bg_color: 1,1,1,0.08
+                    elevation: 2
+                    line_width: 1
+                    line_color: (1, 1, 1, 0.15)
+                    padding: 25
 
                 #Graph + price with last selling/buying
                 MDBoxLayout:
