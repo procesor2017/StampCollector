@@ -410,12 +410,12 @@
                 MDBoxLayout:
                     orientation: 'horizontal'
                     size_hint_y: None
-                    height: 150
+                    height: 350
                     spacing: 10
                     padding: 0
                     MDCard:
                         id: stamp_detail_selling_graph
-                        size_hint: .55, 1
+                        size_hint: .65, 1
                         height: self.minimum_height  # Automatická výška podle obsahu
                         orientation: "vertical"
                         border_radius: 20
@@ -425,17 +425,14 @@
                         line_width: 1
                         line_color: (1, 1, 1, 0.15)
                         padding: 10
-                        MDLabel:
-                            id: stamp_detail_catalogue_price_information_label
-                            theme_text_color: "Custom"
-                            text_color: 1, 1, 1, 1
-                            text: "Graf s cenou"
-                            size_hint: 1, 0.1
-                            font_size: "16sp" 
-                            halign: "center"
+                        # Přidáme container pro graf, aby bylo možné vykreslovat na Canvas
+                        FloatLayout:
+                            id: auction_sales_canvas
+                            size_hint: 1, 1
+                            pos_hint: {"top": 1}
                     MDCard:
                         id: stamp_detail_last_10_selling_information
-                        size_hint: .45, 1
+                        size_hint: .35, 1
                         height: self.minimum_height  # Automatická výška podle obsahu
                         orientation: "vertical"
                         border_radius: 20

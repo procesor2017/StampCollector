@@ -138,3 +138,19 @@ def get_auctions_by_stamp_base(stamp_id: int):
     if stamp_result:
         return session.query(AuctionSale).filter(AuctionSale.stamp_type_id == stamp_result.stamp_type_id).all()
     return []
+
+def get_all_auction_by_stamp_type(stamp_id: int):
+    query = (
+        session.query(
+            AuctionSale.sale_date, 
+            AuctionSale.sale_price, 
+            StampTypeBase.stamp_type_id,  # stamp_type_id
+            StampTypeBase.type_name,  # Přidáme type_name (název typu známky)
+        )
+        .join(StampTypeBase, StampTypeBase.stamp_type_id == AuctionSale.stamp_type_id)
+        .join(StampBase, StampBase.stamp_id == StampTypeBase.stamp_id)
+        .filter(StampBase.stamp_id == stamp_id)  # Používáme proměnnou stamp_id
+        .order_by(AuctionSale.sale_date)
+        .all()
+    )
+    return query

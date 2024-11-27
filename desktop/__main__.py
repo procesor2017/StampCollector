@@ -1,5 +1,5 @@
 import os
-import logging
+import matplotlib.pyplot as plt
 from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivymd.uix.screen import Screen
@@ -18,8 +18,10 @@ from kivy.uix.behaviors import ButtonBehavior
 from kivymd.uix.fitimage import FitImage
 from kivymd.uix.datatables.datatables import MDDataTable
 from kivy.metrics import dp
-from kivy.core.window import Window
 from kivy.uix.image import Image
+from datetime import datetime
+from kivy_garden.matplotlib.backend_kivyagg import FigureCanvasKivyAgg
+from collections import defaultdict
 
 class MainApp(MDApp):
     def build(self):
@@ -164,6 +166,8 @@ class StampScreen(Screen):
 
         self.get_last_selling_for_stamp()
         self.get_subtype_stamps_to_datatable(stamp_id=stamp_id)
+        self.get_plot_auction_sales(stamp_id=stamp_id)
+
 
     def update_card_height(self, *args):
         """Aktualizuje výšku karty na základě obsahu."""
@@ -251,6 +255,41 @@ class StampScreen(Screen):
             return Image(source=image_path, size_hint=(None, None), size=(dp(100), dp(100)))
         else:
             return MDLabel(text="No Image", size_hint_y=None, height=dp(40))
+        
+    def get_plot_auction_sales(self, stamp_id):
+        # Získání prodeje aukcí z databáze
+        auction_sales = crud.get_all_auction_by_stamp_type(stamp_id)
+
+        if not auction_sales:
+            print("No auction sales found for the given stamp_id.")
+        else:
+            print(f"Found {len(auction_sales)} auction sales.")
+
+        # Příprava dat pro graf
+        sales_by_stamp_type = defaultdict(list)  # Použijeme defaultdict pro seskupení prodejů podle typu známky
+
+        for sale in auction_sales:
+            sales_by_stamp_type[sale[3]].append((sale[0], sale[1]))  # sale[3] je type_name (název typu známky), sale[0] je sale_date, sale[1] je sale_price
+
+        # Vytvoření grafu
+        plt.figure(figsize=(10, 6))
+
+        # Pro každý název typu známky vykreslíme samostatnou čáru
+        for stamp_type_name, sales in sales_by_stamp_type.items():
+            dates = [sale[0] for sale in sales]
+            prices = [sale[1] for sale in sales]
+            plt.plot(dates, prices, label=stamp_type_name)  # Použijeme název typu známky místo stamp_type_id
+
+        plt.title(f"Prodeje aukcí pro známku {stamp_id}")
+        plt.xlabel("Datum")
+        plt.ylabel("Cena")
+        plt.grid(True)
+        plt.legend()  # Přidáme legendu pro různé typy známek (nyní podle názvů)
+
+        # Přidání grafu do Kivy aplikace
+        canvas = self.ids.stamp_detail_selling_graph
+        canvas.clear_widgets()  # Vyčistit předchozí graf
+        canvas.add_widget(FigureCanvasKivyAgg(plt.gcf()))
 
 
 
