@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import Text
@@ -106,6 +106,7 @@ class AuctionSale(Base):
     sale_url = Column(String, nullable=False)  # URL na aukční prodej
     description = Column(String, nullable=True)  # Popis aukce (např. stav, rarita, poznámky)
     state_of_stamp = Column(Text, nullable=True) # **, *, (*)
+    sale_date = Column(DateTime, nullable=False) # Datum a čas kdy došlo k prodeji  ISO 8601
 
     # Vazba zpět na StampTypeBase
     stamp_type = relationship("StampTypeBase", back_populates="auction_sales")
