@@ -129,35 +129,31 @@ class StampScreen(Screen):
         stamp_detail_stamp_emision.text = f"{match.emission.name}"
         stamp_detail_stamp_type.text = f"{crud.get_n_of_stamp_type_base(stamp_id=stamp_id)}"
 
-        # Create article:
-        # Simulovaná data z databáze
-        articles = [
-            {
-                "title": "Článek o známce 1",
-                "image": "obrazek1.jpg",
-                "description": "Toto je podrobný popis k prvnímu článku."
-            },
-            {
-                "title": "Článek o známce 2",
-                "image": "obrazek2.jpg",
-                "description": "Toto je podrobný popis k druhému článku."
-            },
-        ]
+        # Create article/ details:
+        details = crud.get_stamp_detail_by_stamp_id(stamp_id=stamp_id)
 
         # Vymaže aktuální widgety
         articles_container = self.ids.articles_container
         articles_container.clear_widgets()
 
-        # Přidává články do kontejneru
-        for article in articles:
+        # Přidává detaily do kontejneru
+        for detail in details:
+            # Určí, co se zobrazí v těle panelu (podle dostupnosti dat)
+            content_text = (
+                detail.production_notes
+                or detail.history
+                or detail.origin
+                or "Žádné další informace nejsou k dispozici."
+            )
+
             panel = MDExpansionPanel(
-                icon=article["image"],
+                icon="file-document-outline",  # Ikona panelu (můžete nahradit vlastním obrázkem)
                 content=ArticleContent(
-                    image=article["image"],
-                    description=article["description"]
+                    image=detail.photo_paths.split(',')[0] if detail.photo_paths else "",
+                    description=content_text
                 ),
                 panel_cls=MDExpansionPanelOneLine(
-                    text=article["title"]
+                    text=detail.description or "Bez popisu"
                 ),
                 on_open=self.update_card_height,
                 on_close=self.update_card_height,

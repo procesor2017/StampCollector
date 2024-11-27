@@ -1,5 +1,5 @@
 from . import session
-from .models import Emission, StampBase, StampTypeBase, Country, AuctionSale
+from .models import Emission, StampBase, StampTypeBase, Country, AuctionSale, StampDetail
 
 # Emissions
 def insert_emission(name, country, issue_year):
@@ -154,3 +154,6 @@ def get_all_auction_by_stamp_type(stamp_id: int):
         .all()
     )
     return query
+
+def get_stamp_detail_by_stamp_id(stamp_id:int):
+    return session.query(StampDetail).filter(StampBase.stamp_id == stamp_id).all()
