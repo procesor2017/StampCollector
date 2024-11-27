@@ -118,9 +118,12 @@ class StampScreen(Screen):
         stamp_destamp_detail_stamp_nation_and_year = self.ids.stamp_detail_stamp_nation_and_year
         stamp_detail_stamp_emision = self.ids.stamp_detail_stamp_emision
         stamp_detail_stamp_type = self.ids.stamp_detail_stamp_type
+        stamp_detail_stamp_avg_auction_price = self.ids.stamp_detail_avg_auction_price_number
+        stamp_detail_stamp_catalogue_price = self.ids.stamp_detail_catalogue_price_number
 
         match = crud.get_stamp_by_id(stamp_id=stamp_id)
-
+        price = crud.get_total_avg_price_by_stamp_id(stamp_id=stamp_id)
+        avg_auction = crud.get_average_auction_price_by_stamp_id(stamp_id=stamp_id)
 
         stamp_photo_top_card.source = f"./data/images/{match.photo_path_base}"
         stamp_detail_stamp_name.text = f"{match.name}"
@@ -128,6 +131,9 @@ class StampScreen(Screen):
         stamp_destamp_detail_stamp_nation_and_year.text = f"{match.emission.country.name} / {match.emission.issue_year}"
         stamp_detail_stamp_emision.text = f"{match.emission.name}"
         stamp_detail_stamp_type.text = f"{crud.get_n_of_stamp_type_base(stamp_id=stamp_id)}"
+        stamp_detail_stamp_avg_auction_price.text = f"{avg_auction}"
+        stamp_detail_stamp_catalogue_price.text = f"{int(price)}"
+
 
         # Create article/ details:
         details = crud.get_stamp_detail_by_stamp_id(stamp_id=stamp_id)

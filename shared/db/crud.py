@@ -1,5 +1,7 @@
 from . import session
 from .models import Emission, StampBase, StampTypeBase, Country, AuctionSale, StampDetail
+from sqlalchemy import func
+from sqlalchemy.orm import joinedload
 
 # Emissions
 def insert_emission(name, country, issue_year):
@@ -69,6 +71,12 @@ def get_n_of_stamp_type_base(stamp_id):
         StampTypeBase.stamp_id == stamp_id
     ).all()
     return len(stamp_types)
+
+def get_total_avg_price_by_stamp_id(stamp_id: int):
+    result = session.query(func.avg(StampTypeBase.catalog_price_avg)) \
+        .filter(StampTypeBase.stamp_id == stamp_id) \
+        .scalar()
+    return result or 0
 
 # Country
 def insert_country(name):
@@ -155,5 +163,14 @@ def get_all_auction_by_stamp_type(stamp_id: int):
     )
     return query
 
+def get_average_auction_price_by_stamp_id(stamp_id: int):
+    # Výpočet průměrné hodnoty z tabulky AuctionSale
+    result = session.query(func.avg(AuctionSale.sale_price)) \
+        .join(StampTypeBase, AuctionSale.stamp_type_id == StampTypeBase.stamp_type_id) \
+        .filter(StampTypeBase.stamp_id == stamp_id) \
+        .scalar()
+    return result or 0  # Vrátí 0, pokud nejsou žádné záznamy
+
 def get_stamp_detail_by_stamp_id(stamp_id:int):
     return session.query(StampDetail).filter(StampBase.stamp_id == stamp_id).all()
+
