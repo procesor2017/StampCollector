@@ -350,18 +350,18 @@ class Content(MDBoxLayout):
             # Obrázek s textem
             image_with_text = ImageWithText(
                 image_source=match_photo,
-                text=match.name,
-                stamp_id=match.stamp_id
+                data=match
             )
             grid_layout.add_widget(image_with_text)
         self.add_widget(grid_layout)
 
 class ImageWithText(ButtonBehavior, RelativeLayout):
-    def __init__(self, image_source, text, stamp_id, **kwargs):
+    def __init__(self, image_source, data, **kwargs):
         super().__init__(**kwargs)
         self.size_hint = (None, None)
         self.size = ("150dp", "150dp")
-        self.stamp_id = stamp_id
+        self.stamp_id = data.stamp_id
+        self.data = data
         # Obrázek
         self.image = AsyncImage(
             source=image_source,
@@ -372,7 +372,7 @@ class ImageWithText(ButtonBehavior, RelativeLayout):
 
         # Text
         self.label = MDLabel(
-            text=text,
+            text=data.name,
             halign="center",
             valign="middle",
             size_hint=(1, 1),
@@ -388,6 +388,9 @@ class ImageWithText(ButtonBehavior, RelativeLayout):
         right_panel = app.root.ids.right_panel
         stamp_name = app.root.ids.stamp_name
         stamp_photo = app.root.ids.right_panel_md3card_tamp_image
+        detail_about_stamp = app.root.ids.right_panel_detail_about_stamps
+        number_of_stamp_type = app.root.ids.right_panel_number_of_stamp_type_inf
+        saved_number_of_sale = app.root.ids.right_panel_saved_number_of_sale_inf
 
         # Získat aktuální text v panelu
         current_text = stamp_name.text
@@ -395,16 +398,29 @@ class ImageWithText(ButtonBehavior, RelativeLayout):
 
         # Defination ID for *.kv file
         right_panel.stamp_id = self.stamp_id
+        photo = f"./data/images/{self.data.photo_path_base}"
+        detail = f"{self.data.emission.name}"
+        n_stamp_type = f"{crud.get_n_of_stamp_type_base(self.stamp_id)}"
+        n_of_sale =crud.get_count_of_auction_by_stamp_base(stamp_id=self.stamp_id)
+
 
         if right_panel:
             if right_panel.size_hint_x == 0:  # Pokud je panel skrytý, zobrazí ho
                 animation = Animation(size_hint_x=0.45, duration=0.3)
                 animation.start(right_panel)
-                stamp_name.text = new_text  # Aktualizace textu
-                stamp_photo.source = self.image.source
+                stamp_name.text = new_text
+                stamp_photo.source = photo
+                detail_about_stamp.text = detail
+                number_of_stamp_type.text = n_stamp_type
+                saved_number_of_sale.text = f"{n_of_sale}"
             else:
-                if current_text != new_text:  # Pokud se data změnila, aktualizujte je
+                # Refresh data
+                if current_text != new_text:
                     stamp_name.text = new_text
+                    stamp_photo.source = photo
+                    detail_about_stamp.text = detail
+                    number_of_stamp_type.text = n_stamp_type
+                    saved_number_of_sale.text = f"{n_of_sale}"
                 else:  # Pokud se data nezměnila, zavřete panel
                     animation = Animation(size_hint_x=0, duration=0.3)
                     animation.start(right_panel)

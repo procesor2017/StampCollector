@@ -174,3 +174,12 @@ def get_average_auction_price_by_stamp_id(stamp_id: int):
 def get_stamp_detail_by_stamp_id(stamp_id:int):
     return session.query(StampDetail).filter(StampBase.stamp_id == stamp_id).all()
 
+def get_count_of_auction_by_stamp_base(stamp_id):
+    results = (
+        session.query(func.count(AuctionSale.sale_id))
+        .join(StampTypeBase, StampTypeBase.stamp_type_id == AuctionSale.stamp_type_id)
+        .join(StampBase, StampBase.stamp_id == StampTypeBase.stamp_id)
+        .filter(StampBase.stamp_id == stamp_id)
+        .scalar()
+    )
+    return results
