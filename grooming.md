@@ -25,3 +25,4 @@ Desktop App:
 - Settings
     - Import / Export database to csv
     - User profile with adding Stamps
+    - Online update db
